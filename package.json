@@ -1,0 +1,40 @@
+{
+  "name": "urewall",
+  "version": "1.0.0",
+  "description": "events wall",
+  "main": "index.ts",
+  "scripts": {
+    "start": "webpack-dev-server  --mode development --open",
+    "build": "webpack --config webpack.config.js --mode development  --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FO",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/react": "^16.1.0",
+    "@types/react-dom": "^16.0.4",
+    "awesome-typescript-loader": "^5.0.0-1",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0",
+    "source-map-loader": "^0.2.3",
+    "typescript": "^2.8.1",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13",
+    "webpack-dev-server": "^3.1.1"
+  },
+  "dependencies": {
+    "@material-ui/core": "^1.1.0",
+    "@types/react-redux": "^5.0.16",
+    "@types/react-router-dom": "^4.2.6",
+    "@types/redux-form": "^7.2.5",
+    "material-ui": "^1.0.0-beta.40",
+    "material-ui-icons": "^1.0.0-beta.36",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.2.2",
+    "redux": "^3.7.2",
+    "redux-form": "^7.3.0",
+    "redux-observable": "^0.18.0",
+    "rxjs": "^5.5.9",
+    "save": "^2.3.2"
+  }
+}

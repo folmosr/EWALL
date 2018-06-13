@@ -1,0 +1,9 @@
+enum ActionsTypesEnum {
+    LOAD_COUNTRIES = "LOAD_COUNTRIES",
+    FULFILLED_COUNTRIES = "FULFILLED_COUNTRIES",
+    ADD_COUNTRY = "ADD_COUNTRY",
+    UPDATED_COUNTRIES = "UPDATED_COUNTRIES",
+    INIT_FORM = "INIT_FORM",
+}
+
+export default ActionsTypesEnum;
