@@ -75,9 +75,8 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
         let components: JSX.Element = (this.props.loading) ? (<CircularProgress className={this.props.classes.progress} thickness={7} />) :
             (<React.Fragment>
                 <DialogContentText id="alert-dialog-description">
-                    Let Google help apps determine location. This means sending anonymous location data to
-                    Google, even when no apps are running.
-            </DialogContentText>
+                    Administra los paises donde el sistema de manejo de eventos está actualmente operando.
+                    </DialogContentText>
                 <Field
                     className={this.props.classes.textField}
                     name="name"
@@ -101,14 +100,14 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
                     onClose={this.props.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Registro</DialogTitle>
                     <form onSubmit={this.props.handleSubmit}>
                         <DialogContent>
                             {components}
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={this.props.handleClose} color="secondary">Cancelar</Button>
-                            <Button type="submit" color="primary">Registar</Button>
+                            <Button type="submit" color="primary">Guardar</Button>
                         </DialogActions>
                     </form>
                 </Dialog>

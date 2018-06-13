@@ -10,7 +10,12 @@ import Button from "material-ui/Button";
 import AddIcon from "material-ui-icons/Add";
 
 import Store from "../../store/store.namespace";
-import { loadCountries, addCountry, initCountryForm } from "../../actions/countries.actions";
+import {
+    loadCountries,
+    addCountry,
+    initCountryForm,
+    deleteCountry
+} from "../../actions/countries.actions";
 import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../interfaces/country.interfaces";
@@ -20,7 +25,8 @@ type State = { open: boolean; selected: ICountry };
 type DispatchProps = {
     loadCountries: typeof loadCountries;
     addCountry: typeof addCountry;
-    initCountryForm: typeof initCountryForm
+    initCountryForm: typeof initCountryForm;
+    deleteCountry: typeof deleteCountry
 };
 
 type CountryProps = Store.Types.CountryComponentType & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab">;
@@ -28,19 +34,18 @@ type CountryProps = Store.Types.CountryComponentType & DispatchProps & WithStyle
 const actions: DispatchProps = {
     loadCountries,
     addCountry,
-    initCountryForm
+    initCountryForm,
+    deleteCountry
 };
 
 const styles: any = (theme: Theme) => ({
     root: theme.mixins.gutters({
         paddingTop: 16,
         paddingBottom: 16,
-        marginTop: theme.spacing.unit * 3,
         minHeight: 270,
-        display: "flex",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        padding: theme.spacing.unit / 2,
+        display: "flow-root",
+        justifyContent: "flex-start",
+        flexWrap: "wrap"
     }),
     progress: {
         margin: theme.spacing.unit * 2,
@@ -80,16 +85,22 @@ class Countries extends React.Component<CountryProps, State> {
 
     componentWillReceiveProps(nextProps: CountryProps): void {
         if (nextProps.updated) {
+            this.props.initCountryForm({
+                _id: null,
+                name: null,
+                code: null,
+                currency: null
+            });
             this.setState({ open: false });
         }
     }
 
     handleClickOpen = () => {
         this.props.initCountryForm({
-            _id: "",
-            name: "",
-            code: "",
-            currency: ""
+            _id: null,
+            name: null,
+            code: null,
+            currency: null
         });
         this.setState({ open: true });
     }
@@ -107,8 +118,15 @@ class Countries extends React.Component<CountryProps, State> {
         this.setState({ open: true });
     }
 
-    render(): JSX.Element {
+    onDelete = (selected: ICountry): any => {
+        this.props.deleteCountry(selected);
+    }
 
+    render(): JSX.Element {
+        let innerComponent: JSX.Element = (this.props.loading) ?
+            <CircularProgress className={this.props.classes.progress} thickness={7} /> :
+            (this.props.countries.length > 0) &&
+            <CountryList countries={this.props.countries} onSelect={this.onSelect} onDelete={this.onDelete} />;
         return (
             <React.Fragment>
                 <Typography variant="headline" component="h3">
@@ -118,8 +136,7 @@ class Countries extends React.Component<CountryProps, State> {
                     Lista de países ya configurados
                 </Typography>
                 <Paper className={this.props.classes.root} elevation={4}>
-                    {this.props.loading && <CircularProgress className={this.props.classes.progress} thickness={7} />}
-                    {(this.props.countries.length > 0) && <CountryList countries={this.props.countries} onSelect={this.onSelect} />}
+                    {innerComponent}
                     <Button variant="fab" mini color="secondary" aria-label="add"
                         className={this.props.classes.fab}
                         onClick={this.handleClickOpen}>

@@ -25,13 +25,13 @@ const HeaderComponent: React.SFC<any> = (props: any): JSX.Element => {
     return (
         <AppBar position="absolute" className={classes.appBar} >
             <Toolbar>
-                <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                {/* <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
                     <MenuIcon />
-                </IconButton>
+                </IconButton> */}
                 <Typography variant="title" color="inherit" className={classes.flex}>
-                    Title
+                    Yours Events Wall
                     </Typography>
-                <Button color="inherit">Login</Button>
+                {/* <Button color="inherit">Login</Button> */}
             </Toolbar>
         </AppBar>
     );

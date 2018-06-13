@@ -33,3 +33,9 @@ export type InitFomrAction = {
     type: ActionsTypesEnum.INIT_FORM,
     country: ICountry
 };
+
+export type DeleteCountryAction = {
+    type: ActionsTypesEnum.DELETE_COUNTRY,
+    country: ICountry,
+    loading: true
+};

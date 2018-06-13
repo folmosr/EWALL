@@ -3,7 +3,8 @@ import {
     FulfilledCountryAction,
     AddCountryAction,
     UpdatedCountryAction,
-    InitFomrAction
+    InitFomrAction,
+    DeleteCountryAction
 } from "../types/countries.actions.type";
 import ICountry from "../interfaces/country.interfaces";
 import ActionsTypesEnum from "../enums/actionstypes.enum";
@@ -31,6 +32,14 @@ function addCountry(country: ICountry): AddCountryAction {
     };
 }
 
+function deleteCountry(country: ICountry): DeleteCountryAction {
+    return {
+        type: ActionsTypesEnum.DELETE_COUNTRY,
+        country,
+        loading:true
+    };
+}
+
 function updatedCountries(countries: Array<ICountry>): UpdatedCountryAction {
     return {
         type: ActionsTypesEnum.UPDATED_COUNTRIES,
@@ -46,10 +55,12 @@ function initCountryForm(country: ICountry): InitFomrAction {
         country
     };
 }
+
 export {
     loadCountries,
     fullfilledCountries,
     addCountry,
     updatedCountries,
-    initCountryForm
+    initCountryForm,
+    deleteCountry
 };

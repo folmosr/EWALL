@@ -6,7 +6,8 @@ import {
     FulfilledCountryAction,
     AddCountryAction,
     UpdatedCountryAction,
-    InitFomrAction
+    InitFomrAction,
+    DeleteCountryAction
 } from "../types/countries.actions.type";
 
 type actions = (
@@ -14,7 +15,8 @@ type actions = (
     | LoadCountryAction
     | FulfilledCountryAction
     | AddCountryAction
-    | UpdatedCountryAction);
+    | UpdatedCountryAction
+    | DeleteCountryAction);
 
 const initialState: Store.Types.CountryComponentType = Store.CountryComponent;
 
@@ -29,6 +31,8 @@ function countriesReducer(state: Store.Types.CountryComponentType = initialState
         case ActionsTypesEnum.UPDATED_COUNTRIES:
             return { loading: action.loading, country: state.country, countries: action.countries, updated: action.updated };
         case ActionsTypesEnum.ADD_COUNTRY:
+            return { loading: action.loading, country: action.country, countries: state.countries, updated: state.updated };
+        case ActionsTypesEnum.DELETE_COUNTRY:
             return { loading: action.loading, country: action.country, countries: state.countries, updated: state.updated };
         default:
             return state;

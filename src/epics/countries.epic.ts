@@ -4,12 +4,13 @@ import { ofType, ActionsObservable } from "redux-observable";
 import { Action } from "redux";
 
 import { fullfilledCountries, updatedCountries } from "../actions/countries.actions";
-import { LoadCountryAction, AddCountryAction } from "../types/countries.actions.type";
+import { LoadCountryAction, AddCountryAction, DeleteCountryAction } from "../types/countries.actions.type";
 import ActionsTypesEnum from "../enums/actionstypes.enum";
 import { isNullOrUndefined } from "util";
 
 
 const url: string = `http://localhost:3000/api/countries/`;
+const setUrlRemoveById:(param:string)=> string = (_id:string)=> `http://localhost:3000/api/countries/${_id}`;
 
 const requestSettings: any = {
     url,
@@ -51,4 +52,16 @@ function addCountryEpic(actions$: ActionsObservable<Action>): Observable<Action>
         });
 }
 
-export { loadCountriesEpic, addCountryEpic };
+function deleteCountryEpic(actions$: ActionsObservable<Action>): Observable<Action> {
+    return actions$.ofType<DeleteCountryAction>(ActionsTypesEnum.DELETE_COUNTRY)
+        .switchMap((action: DeleteCountryAction) => {
+            return Observable.ajax.delete(
+                setUrlRemoveById(action.country._id)
+            );
+        })
+        .switchMap(() => {
+            return Observable.ajax(requestSettings)
+                .map(q => updatedCountries(q.response));
+        });
+}
+export { loadCountriesEpic, addCountryEpic, deleteCountryEpic };
