@@ -14,14 +14,17 @@ namespace Store {
 
         export type All = {
             CountryComponent: CountryComponentType,
-            CountryData: ICountry
+            CountryData: { country: ICountry, open: boolean }
         };
 
         export type CountryForm = {
-            _id?: string,
-            name: string,
-            code: string,
-            currency: string
+            country: {
+                _id?: string,
+                name: string,
+                code: string,
+                currency: string
+            },
+            open: boolean
         };
     }
 

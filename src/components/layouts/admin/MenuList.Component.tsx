@@ -35,7 +35,7 @@ const MenuListComponent: React.SFC<any> = (props: any) => {
           <ListItemIcon>
             <LanguageIcon />
           </ListItemIcon>
-          <ListItemText primary={<Link to="/countries"  className={classes.a} > Countries </Link>} />
+          <ListItemText primary={<Link to="/countries"  className={classes.a} > Países </Link>} />
         </ListItem>
       </List>
       <Divider />

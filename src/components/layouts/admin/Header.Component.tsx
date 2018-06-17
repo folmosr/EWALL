@@ -29,7 +29,7 @@ const HeaderComponent: React.SFC<any> = (props: any): JSX.Element => {
                     <MenuIcon />
                 </IconButton> */}
                 <Typography variant="title" color="inherit" className={classes.flex}>
-                    Yours Events Wall
+                    Administración de Eventos
                     </Typography>
                 {/* <Button color="inherit">Login</Button> */}
             </Toolbar>

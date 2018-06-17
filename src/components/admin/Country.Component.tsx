@@ -20,7 +20,7 @@ import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../interfaces/country.interfaces";
 
-type State = { open: boolean; selected: ICountry };
+type State = { selected: ICountry };
 
 type DispatchProps = {
     loadCountries: typeof loadCountries;
@@ -64,7 +64,6 @@ const styles: any = (theme: Theme) => ({
 class Countries extends React.Component<CountryProps, State> {
 
     state: State = {
-        open: false,
         selected: {
             _id: "",
             name: "",
@@ -90,8 +89,7 @@ class Countries extends React.Component<CountryProps, State> {
                 name: null,
                 code: null,
                 currency: null
-            });
-            this.setState({ open: false });
+            }, false);
         }
     }
 
@@ -101,12 +99,16 @@ class Countries extends React.Component<CountryProps, State> {
             name: null,
             code: null,
             currency: null
-        });
-        this.setState({ open: true });
+        }, true);
     }
 
     handleClose = (): void => {
-        this.setState({ open: false });
+        this.props.initCountryForm({
+            _id: null,
+            name: null,
+            code: null,
+            currency: null
+        }, false);
     }
 
     submit = (value: ICountry): void => {
@@ -114,8 +116,7 @@ class Countries extends React.Component<CountryProps, State> {
     }
 
     onSelect = (selected: ICountry): any => {
-        this.props.initCountryForm(selected);
-        this.setState({ open: true });
+        this.props.initCountryForm(selected, true);
     }
 
     onDelete = (selected: ICountry): any => {
@@ -144,7 +145,6 @@ class Countries extends React.Component<CountryProps, State> {
                     </Button>
                 </Paper>
                 <DialogCountries
-                    openDialog={this.state.open}
                     handleClose={this.handleClose}
                     loading={this.props.loading}
                     onSubmit={this.submit}

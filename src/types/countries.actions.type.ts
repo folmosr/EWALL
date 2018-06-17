@@ -31,7 +31,8 @@ export type UpdatedCountryAction = {
 
 export type InitFomrAction = {
     type: ActionsTypesEnum.INIT_FORM,
-    country: ICountry
+    country: ICountry,
+    open: boolean
 };
 
 export type DeleteCountryAction = {

@@ -34,7 +34,7 @@ type Props = {
     children?: React.ReactNode;
     initialValues: ICountry;
 } & DispatchProps;
-type PropsWithStyle = Props & WithStyles<"progress" | "textField">;
+type PropsWithStyle = Props & WithStyles<"progress" | "textField" | "dialogContentText">;
 type InputTexField = {
     className: string
 };
@@ -50,6 +50,12 @@ const styles: any = (theme: Theme) => ({
         marginRight: 20,
         width: 500,
     },
+    dialogContentText: {
+        marginTop: 0,
+        marginBotton: 15,
+        marginLeft: 20,
+        marginRight: 20
+    }
 });
 
 
@@ -72,9 +78,10 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
     }
 
     render(): JSX.Element {
-        let components: JSX.Element = (this.props.loading) ? (<CircularProgress className={this.props.classes.progress} thickness={7} />) :
+        let components: JSX.Element = (this.props.loading) ? (<div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress className={this.props.classes.progress} thickness={7} /></div>) :
             (<React.Fragment>
-                <DialogContentText id="alert-dialog-description">
+                <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
                     Administra los paises donde el sistema de manejo de eventos está actualmente operando.
                     </DialogContentText>
                 <Field
@@ -100,7 +107,7 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
                     onClose={this.props.handleClose}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle id="form-dialog-title">Registro</DialogTitle>
+                    <DialogTitle style={{ paddinBotton: 10 }} id="form-dialog-title">Registro</DialogTitle>
                     <form onSubmit={this.props.handleSubmit}>
                         <DialogContent>
                             {components}
@@ -119,6 +126,7 @@ let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({ form: "countryForm", enableReinitialize: true })(DialogCountries);
 export default connect(
     (state: Store.Types.All) => ({
-        initialValues: state.CountryData,
+        initialValues: state.CountryData.country,
+        openDialog: state.CountryData.open
     }),
 )(withStyles(styles)<Props>(DialogCountriesForm));
