@@ -4,11 +4,9 @@ import {
     reduxForm,
     InjectedFormProps,
     DecoratedComponentClass,
-    WrappedFieldProps,
-    FieldsProps,
-    SubmitHandler,
-    FormInstance
+    WrappedFieldProps
 } from "redux-form";
+import { connect } from "react-redux";
 import Store from "../../store/store.namespace";
 import { Theme, withStyles, WithStyles } from "material-ui/styles";
 import { CircularProgress } from "material-ui/Progress";
@@ -20,14 +18,15 @@ import Dialog, {
     DialogTitle,
 } from "material-ui/Dialog";
 import Button from "material-ui/Button";
-import { TextField } from "material-ui";
+import { TextField, FormHelperText } from "material-ui";
 import ICountry from "../../interfaces/country.interfaces";
 
-import { addCountry } from "../../actions/countries.actions";
-import { TextFieldProps } from "material-ui/TextField";
-import { connect } from "react-redux";
+import { required, justLetter, minLengthOfISO } from "../../helpers/validations";
 
-type DispatchProps = { onSubmit: (value: ICountry) => void, handleClose: () => void };
+type DispatchProps = {
+    onSubmit: (value: ICountry) => void,
+    handleClose: () => void
+};
 type Props = {
     loading: boolean;
     openDialog: boolean;
@@ -62,18 +61,23 @@ const styles: any = (theme: Theme) => ({
 const renderTextField: React.StatelessComponent<WrappedFieldProps & InputTexField> = (props: WrappedFieldProps & InputTexField) => {
     const { className, input, label, meta: { touched, error, dirty } } = props;
     return (
-        <TextField
+        <React.Fragment><TextField
             placeholder={label}
             label={label}
             {...input}
+            error={(error && touched)}
             className={className}
         />
+            {(error && touched) && <FormHelperText error={error} className={className}>{error}</FormHelperText>}
+        </React.Fragment>
     );
 };
 
-class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps<{}, PropsWithStyle>, {}> {
+let asyncValidate: any;
 
-    constructor(props: PropsWithStyle & InjectedFormProps<{}, PropsWithStyle>) {
+class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>, {}> {
+
+    constructor(props: PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>) {
         super(props);
     }
 
@@ -88,17 +92,20 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
                     className={this.props.classes.textField}
                     name="name"
                     label="Nombre"
-                    component={renderTextField} />
+                    component={renderTextField}
+                    validate={[required, justLetter]} />
                 <Field
                     className={this.props.classes.textField}
                     name="code"
                     label="Código ISO"
-                    component={renderTextField} />
+                    component={renderTextField}
+                    validate={[required, minLengthOfISO]} />
                 <Field
                     className={this.props.classes.textField}
                     name="currency"
-                    label="Moneda (Simbolo + Texto)"
-                    component={renderTextField} />
+                    label="Moneda (ISO)"
+                    component={renderTextField}
+                    validate={[required, minLengthOfISO]} />
             </React.Fragment>);
         return (
             <div>
@@ -114,7 +121,7 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
                         </DialogContent>
                         <DialogActions>
                             <Button type="button" onClick={this.props.handleClose} color="secondary">Cancelar</Button>
-                            <Button type="submit" color="primary">Guardar</Button>
+                            <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                         </DialogActions>
                     </form>
                 </Dialog>
@@ -123,7 +130,10 @@ class DialogCountries extends React.Component<PropsWithStyle & InjectedFormProps
     }
 }
 let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
-    reduxForm<{}, PropsWithStyle>({ form: "countryForm", enableReinitialize: true })(DialogCountries);
+    reduxForm<{}, PropsWithStyle>({
+        form: "countryForm",
+        enableReinitialize: true
+    })(DialogCountries);
 export default connect(
     (state: Store.Types.All) => ({
         initialValues: state.CountryData.country,

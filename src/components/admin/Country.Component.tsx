@@ -19,6 +19,7 @@ import {
 import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../interfaces/country.interfaces";
+import { SubmissionError } from "redux-form";
 
 type State = { selected: ICountry };
 
@@ -109,6 +110,15 @@ class Countries extends React.Component<CountryProps, State> {
             code: null,
             currency: null
         }, false);
+    }
+
+    asyncValidate = async (value: ICountry) => {
+        const sleep: any = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+        await sleep(1000);
+        let founded: ICountry = this.props.countries.find((element: ICountry) => element.name === value.name)
+        if (founded && !value._id) {
+           return Promise.reject({ name: `Nombre de país ${value.name} existente` });
+        }
     }
 
     submit = (value: ICountry): void => {
