@@ -4,7 +4,8 @@ import {
     reduxForm,
     InjectedFormProps,
     DecoratedComponentClass,
-    WrappedFieldProps
+    WrappedFieldProps,
+    reset
 } from "redux-form";
 import { connect } from "react-redux";
 import Store from "../../store/store.namespace";
@@ -21,7 +22,7 @@ import Button from "material-ui/Button";
 import { TextField, FormHelperText } from "material-ui";
 import ICountry from "../../interfaces/country.interfaces";
 
-import { required, justLetter, minLengthOfISO } from "../../helpers/validations";
+import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../helpers/validations";
 
 type DispatchProps = {
     onSubmit: (value: ICountry) => void,
@@ -59,7 +60,7 @@ const styles: any = (theme: Theme) => ({
 
 
 const renderTextField: React.StatelessComponent<WrappedFieldProps & InputTexField> = (props: WrappedFieldProps & InputTexField) => {
-    const { className, input, label, meta: { touched, error, dirty } } = props;
+    const { className, input, label, meta: { touched, error, asyncValidating, dirty } } = props;
     return (
         <React.Fragment><TextField
             placeholder={label}
@@ -79,6 +80,10 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
 
     constructor(props: PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>) {
         super(props);
+    }
+
+    onComponentWillMount(): void {
+        this.props.reset();
     }
 
     render(): JSX.Element {
@@ -120,7 +125,10 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                             {components}
                         </DialogContent>
                         <DialogActions>
-                            <Button type="button" onClick={this.props.handleClose} color="secondary">Cancelar</Button>
+                            <Button type="button" onClick={() => {
+                                this.props.reset();
+                                this.props.handleClose();
+                            }} color="secondary">Cancelar</Button>
                             <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                         </DialogActions>
                     </form>
@@ -129,10 +137,17 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         );
     }
 }
+const afterSubmit:any = (result:any, dispatch:any) => {
+    dispatch(reset("countryForm"));
+};
+
 let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
         form: "countryForm",
-        enableReinitialize: true
+        asyncValidate: asyncValidateCountry,
+        asyncBlurFields: ["code"],
+        enableReinitialize: true,
+        onSubmitSuccess:afterSubmit
     })(DialogCountries);
 export default connect(
     (state: Store.Types.All) => ({

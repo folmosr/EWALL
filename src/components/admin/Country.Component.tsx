@@ -19,9 +19,10 @@ import {
 import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../interfaces/country.interfaces";
-import { SubmissionError } from "redux-form";
+import ConfirmDialog from "../generics/confirmationDialog.Component";
+import ReactDOM = require("react-dom");
 
-type State = { selected: ICountry };
+type State = { selected: ICountry; openConfirm: boolean };
 
 type DispatchProps = {
     loadCountries: typeof loadCountries;
@@ -66,11 +67,12 @@ class Countries extends React.Component<CountryProps, State> {
 
     state: State = {
         selected: {
-            _id: "",
-            name: "",
-            code: "",
-            currency: ""
-        }
+            _id: null,
+            name: null,
+            code: null,
+            currency: null
+        },
+        openConfirm: false
     };
 
     constructor(props: CountryProps) {
@@ -83,32 +85,36 @@ class Countries extends React.Component<CountryProps, State> {
         }
     }
 
-    componentWillReceiveProps(nextProps: CountryProps): void {
+    static getDerivedStateFromProps(nextProps: CountryProps, prevState: State): State {
         if (nextProps.updated) {
-            this.props.initCountryForm({
-                _id: null,
-                name: null,
-                code: null,
-                currency: null
-            }, false);
+            return {
+                selected: {
+                    _id: null,
+                    name: null,
+                    code: null,
+                    currency: null
+                },
+                openConfirm: false
+            };
         }
+        return null;
     }
 
     handleClickOpen = () => {
         this.props.initCountryForm({
-            _id: null,
-            name: null,
-            code: null,
-            currency: null
+            _id: undefined,
+            name: undefined,
+            code: undefined,
+            currency: undefined
         }, true);
     }
 
     handleClose = (): void => {
         this.props.initCountryForm({
-            _id: null,
-            name: null,
-            code: null,
-            currency: null
+            _id: undefined,
+            name: undefined,
+            code: undefined,
+            currency: undefined
         }, false);
     }
 
@@ -117,12 +123,13 @@ class Countries extends React.Component<CountryProps, State> {
         await sleep(1000);
         let founded: ICountry = this.props.countries.find((element: ICountry) => element.name === value.name)
         if (founded && !value._id) {
-           return Promise.reject({ name: `Nombre de país ${value.name} existente` });
+            return Promise.reject({ name: `Nombre de país ${value.name} existente` });
         }
     }
 
     submit = (value: ICountry): void => {
         this.props.addCountry(value);
+        this.handleClose();
     }
 
     onSelect = (selected: ICountry): any => {
@@ -130,7 +137,23 @@ class Countries extends React.Component<CountryProps, State> {
     }
 
     onDelete = (selected: ICountry): any => {
-        this.props.deleteCountry(selected);
+        this.setState({ selected, openConfirm: true });
+    }
+
+    onClickDeleteOk = (): void => {
+        this.props.deleteCountry(this.state.selected);
+    }
+
+    onClickCancelDelete = (): void => {
+        this.setState({
+            selected: {
+                _id: null,
+                name: null,
+                code: null,
+                currency: null
+            },
+            openConfirm: false
+        });
     }
 
     render(): JSX.Element {
@@ -154,11 +177,21 @@ class Countries extends React.Component<CountryProps, State> {
                         <AddIcon />
                     </Button>
                 </Paper>
-                <DialogCountries
+                {ReactDOM.createPortal(<DialogCountries
                     handleClose={this.handleClose}
                     loading={this.props.loading}
                     onSubmit={this.submit}
-                />
+                />,
+                    document.getElementById("portal-container")
+                )
+                }
+                {ReactDOM.createPortal(
+                    <ConfirmDialog
+                        openDialog={this.state.openConfirm}
+                        handlerOk={this.onClickDeleteOk}
+                        handlerCancel={this.onClickCancelDelete} />,
+                    document.getElementById("portal-container")
+                )}
             </React.Fragment>
         );
     }
