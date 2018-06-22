@@ -129,7 +129,6 @@ class Countries extends React.Component<CountryProps, State> {
 
     submit = (value: ICountry): void => {
         this.props.addCountry(value);
-        this.handleClose();
     }
 
     onSelect = (selected: ICountry): any => {

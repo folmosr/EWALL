@@ -23,6 +23,7 @@ import { TextField, FormHelperText } from "material-ui";
 import ICountry from "../../interfaces/country.interfaces";
 
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../helpers/validations";
+import { initCountryForm } from "../../actions/countries.actions";
 
 type DispatchProps = {
     onSubmit: (value: ICountry) => void,
@@ -137,8 +138,14 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         );
     }
 }
-const afterSubmit:any = (result:any, dispatch:any) => {
+const afterSubmit: any = (result: any, dispatch: any) => {
     dispatch(reset("countryForm"));
+    dispatch(initCountryForm({
+        _id: undefined,
+        name: undefined,
+        code: undefined,
+        currency: undefined
+    }, false));
 };
 
 let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
@@ -147,7 +154,7 @@ let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
         asyncValidate: asyncValidateCountry,
         asyncBlurFields: ["code"],
         enableReinitialize: true,
-        onSubmitSuccess:afterSubmit
+        onSubmitSuccess: afterSubmit
     })(DialogCountries);
 export default connect(
     (state: Store.Types.All) => ({
