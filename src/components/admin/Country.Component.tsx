@@ -109,15 +109,6 @@ class Countries extends React.Component<CountryProps, State> {
         }, true);
     }
 
-    handleClose = (): void => {
-        this.props.initCountryForm({
-            _id: undefined,
-            name: undefined,
-            code: undefined,
-            currency: undefined
-        }, false);
-    }
-
     asyncValidate = async (value: ICountry) => {
         const sleep: any = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
         await sleep(1000);
@@ -177,7 +168,6 @@ class Countries extends React.Component<CountryProps, State> {
                     </Button>
                 </Paper>
                 {ReactDOM.createPortal(<DialogCountries
-                    handleClose={this.handleClose}
                     loading={this.props.loading}
                     onSubmit={this.submit}
                 />,

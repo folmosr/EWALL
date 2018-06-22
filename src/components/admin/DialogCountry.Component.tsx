@@ -24,10 +24,11 @@ import ICountry from "../../interfaces/country.interfaces";
 
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../helpers/validations";
 import { initCountryForm } from "../../actions/countries.actions";
+import { Dispatch } from "redux";
 
 type DispatchProps = {
-    onSubmit: (value: ICountry) => void,
-    handleClose: () => void
+    onSubmit: (value: ICountry) => void
+    dispatch: Dispatch<any>
 };
 type Props = {
     loading: boolean;
@@ -116,8 +117,10 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         return (
             <div>
                 <Dialog
+                   disableBackdropClick
+                   disableEscapeKeyDown
                     open={this.props.openDialog}
-                    onClose={this.props.handleClose}
+                    onClose={() => resetAndCloseForm("countryForm", this.props.dispatch)}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle style={{ paddinBotton: 10 }} id="form-dialog-title">Registro</DialogTitle>
@@ -126,10 +129,8 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                             {components}
                         </DialogContent>
                         <DialogActions>
-                            <Button type="button" onClick={() => {
-                                this.props.reset();
-                                this.props.handleClose();
-                            }} color="secondary">Cancelar</Button>
+                            <Button type="button" onClick={() => resetAndCloseForm("countryForm", this.props.dispatch)}
+                                color="secondary">Cancelar</Button>
                             <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                         </DialogActions>
                     </form>
@@ -138,14 +139,18 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         );
     }
 }
-const afterSubmit: any = (result: any, dispatch: any) => {
-    dispatch(reset("countryForm"));
+const resetAndCloseForm: (v: string, dispatch: Dispatch<any>) => any = (form: string, dispatch: Dispatch<any>): any => {
+    dispatch(reset(form));
     dispatch(initCountryForm({
         _id: undefined,
         name: undefined,
         code: undefined,
         currency: undefined
     }, false));
+};
+
+const afterSubmit: any = (result: any, dispatch: any) => {
+    resetAndCloseForm("countryForm", dispatch);
 };
 
 let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
