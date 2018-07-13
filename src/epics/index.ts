@@ -5,6 +5,12 @@ import {
     addCountryEpic,
     deleteCountryEpic
 } from "./countries.epic";
-import { deleteCountry } from "../actions/countries.actions";
 
-export default combineEpics(loadCountriesEpic, addCountryEpic, deleteCountryEpic);
+import { loadSponsorsEpic } from "./sponsors.epic";
+
+export default combineEpics(
+    loadCountriesEpic,
+    addCountryEpic,
+    deleteCountryEpic,
+    loadSponsorsEpic
+);

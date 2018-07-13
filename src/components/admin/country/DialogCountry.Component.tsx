@@ -8,22 +8,22 @@ import {
     reset
 } from "redux-form";
 import { connect } from "react-redux";
-import Store from "../../store/store.namespace";
-import { Theme, withStyles, WithStyles } from "material-ui/styles";
-import { CircularProgress } from "material-ui/Progress";
-import blue from "material-ui/colors/blue";
-import Dialog, {
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-} from "material-ui/Dialog";
-import Button from "material-ui/Button";
-import { TextField, FormHelperText } from "material-ui";
-import ICountry from "../../interfaces/country.interfaces";
+import Store from "../../../store/store.namespace";
+import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import blue from "@material-ui/core/colors/blue";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import ICountry from "../../../interfaces/country.interfaces";
 
-import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../helpers/validations";
-import { initCountryForm } from "../../actions/countries.actions";
+import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/validations";
+import { initCountryForm } from "../../../actions/countries.actions";
 import { Dispatch } from "redux";
 
 type DispatchProps = {
@@ -123,7 +123,7 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                     onClose={() => resetAndCloseForm("countryForm", this.props.dispatch)}
                     aria-labelledby="form-dialog-title"
                 >
-                    <DialogTitle style={{ paddinBotton: 10 }} id="form-dialog-title">Registro</DialogTitle>
+                    <DialogTitle id="form-dialog-title">Registro</DialogTitle>
                     <form onSubmit={this.props.handleSubmit}>
                         <DialogContent>
                             {components}

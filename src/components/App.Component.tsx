@@ -1,6 +1,5 @@
 import * as React from "React";
-import { Grid, withStyles } from "material-ui";
-import CssBaseline from "material-ui/CssBaseline";
+import { Grid, withStyles, CssBaseline } from "@material-ui/core";
 
 import { Header, SideBar, Body } from "./layouts/admin";
 

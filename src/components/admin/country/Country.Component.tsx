@@ -1,25 +1,25 @@
 import * as React from "React";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
-import { Theme, withStyles, WithStyles } from "material-ui/styles";
-import { CircularProgress } from "material-ui/Progress";
-import Paper from "material-ui/Paper";
-import Typography from "material-ui/Typography";
-import blue from "material-ui/colors/blue";
-import Button from "material-ui/Button";
-import AddIcon from "material-ui-icons/Add";
+import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import blue from "@material-ui/core/colors/blue";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
 
-import Store from "../../store/store.namespace";
+import Store from "../../../store/store.namespace";
 import {
     loadCountries,
     addCountry,
     initCountryForm,
     deleteCountry
-} from "../../actions/countries.actions";
+} from "../../../actions/countries.actions";
 import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
-import ICountry from "../../interfaces/country.interfaces";
-import ConfirmDialog from "../generics/confirmationDialog.Component";
+import ICountry from "../../../interfaces/country.interfaces";
+import ConfirmDialog from "../../generics/confirmationDialog.Component";
 import ReactDOM = require("react-dom");
 
 type State = { selected: ICountry; openConfirm: boolean };

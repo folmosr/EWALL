@@ -1,9 +1,9 @@
 import * as React from "React";
-import Avatar from "material-ui/Avatar";
-import Chip from "material-ui/Chip";
-import { Theme, withStyles, WithStyles } from "material-ui/styles";
+import Avatar from "@material-ui/core/Avatar";
+import Chip from "@material-ui/core/Chip";
+import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
 
-import ICountry from "../../interfaces/country.interfaces";
+import ICountry from "../../../interfaces/country.interfaces";
 
 type Props = {
     countries: Array<ICountry>,

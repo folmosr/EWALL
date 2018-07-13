@@ -1,5 +1,5 @@
 import ICountry from "../interfaces/country.interfaces";
-import ActionsTypesEnum from "../enums/actionstypes.enum";
+import ActionsTypesEnum from "../enums/countriesActionsTypes.enum";
 
 export type LoadCountryAction = {
     type: ActionsTypesEnum.LOAD_COUNTRIES,

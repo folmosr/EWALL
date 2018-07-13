@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Switch, Route } from "react-router-dom";
-import { Typography, withStyles } from "material-ui";
+import { withStyles } from "@material-ui/core";
 
 import HomeComponent from "../../admin/Home.Component";
-import CountryComponent from "../../admin/Country.Component";
+import CountryComponent from "../../admin/country/Country.Component";
+import SponsorComponent from "../../admin/sponsor/Sponsor.Component";
 
 const styles: any = (theme: any) => ({
     content: {
@@ -23,6 +24,7 @@ const BodyComponent:React.SFC<any> = (props: any): JSX.Element => {
             <Switch>
                 <Route exact path="/" component={HomeComponent} />
                 <Route path="/countries" component={CountryComponent} />
+                <Route path="/sponsors" component={SponsorComponent} />
             </Switch>
         </main>
     );

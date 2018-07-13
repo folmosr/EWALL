@@ -1,4 +1,5 @@
 import ICountry from "../interfaces/country.interfaces";
+import ISponsor from "../interfaces/sponsor.interfaces";
 
 namespace Store {
 
@@ -12,8 +13,15 @@ namespace Store {
             error?: any
         };
 
+        export type SponsorComponentType = {
+            loading: boolean,
+            sponsors: Array<ISponsor>,
+            error?: any
+        };
+
         export type All = {
             CountryComponent: CountryComponentType,
+            SponsorComponent: SponsorComponentType,
             CountryData: { country: ICountry, open: boolean }
         };
 
@@ -36,12 +44,18 @@ namespace Store {
     };
 
     const countries: Array<ICountry> = [];
+    const sponsors: Array<ISponsor> = [];
 
     export const CountryComponent: Store.Types.CountryComponentType = {
         loading: true,
         updated: false,
         country,
         countries
+    };
+
+    export const SponsorComponent: Store.Types.SponsorComponentType = {
+        loading: true,
+        sponsors
     };
 }
 export default Store;

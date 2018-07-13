@@ -5,9 +5,9 @@ import {
     UpdatedCountryAction,
     InitFomrAction,
     DeleteCountryAction
-} from "../types/countries.actions.type";
+} from "../types/countriesActionsTypes";
 import ICountry from "../interfaces/country.interfaces";
-import ActionsTypesEnum from "../enums/actionstypes.enum";
+import ActionsTypesEnum from "../enums/countriesActionsTypes.enum";
 
 function loadCountries(): LoadCountryAction {
     return {

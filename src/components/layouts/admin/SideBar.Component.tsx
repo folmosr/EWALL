@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Grid, Typography, Divider, Drawer, withStyles } from "material-ui";
+import { Drawer, withStyles } from "@material-ui/core";
 
 import MenuList from "./MenuList.Component";
 

@@ -1,8 +1,9 @@
 import * as React from "react";
-import { List, ListItem, ListItemIcon, ListItemText, Divider, withStyles } from "material-ui";
+import { List, ListItem, ListItemIcon, ListItemText, Divider, withStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import HomeIcon from "material-ui-icons/Home";
-import LanguageIcon from "material-ui-icons/Language";
+import HomeIcon from "@material-ui/icons/Home";
+import LanguageIcon from "@material-ui/icons/Language";
+import ThumbsUpDown from "@material-ui/icons/ThumbsUpDown";
 
 const styles: any = (theme: any) => ({
   root: {
@@ -16,7 +17,7 @@ const styles: any = (theme: any) => ({
     fontWeight: 400,
     fontFamily: `"Roboto", "Helvetica", "Arial", "sans-serif"`,
     lineHeight: "1.5em",
-    textDecoration:"none"
+    textDecoration: "none"
   }
 });
 
@@ -35,7 +36,13 @@ const MenuListComponent: React.SFC<any> = (props: any) => {
           <ListItemIcon>
             <LanguageIcon />
           </ListItemIcon>
-          <ListItemText primary={<Link to="/countries"  className={classes.a} > Países </Link>} />
+          <ListItemText primary={<Link to="/countries" className={classes.a} > Países </Link>} />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
+            <ThumbsUpDown />
+          </ListItemIcon>
+          <ListItemText primary={<Link to="/sponsors" className={classes.a} > Sponsors </Link>} />
         </ListItem>
       </List>
       <Divider />

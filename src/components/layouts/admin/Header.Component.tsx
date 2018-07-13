@@ -1,6 +1,6 @@
 import * as React from "React";
-import { AppBar, Toolbar, IconButton, Typography, Button, withStyles, Theme } from "material-ui";
-import MenuIcon from "material-ui-icons/Menu";
+import { AppBar, Toolbar, IconButton, Typography, Button, withStyles, Theme } from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const drawerWidth: number = 240;
 
