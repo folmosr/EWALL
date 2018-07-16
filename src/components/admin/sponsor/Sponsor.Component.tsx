@@ -6,8 +6,9 @@ import { bindActionCreators } from "redux";
 import { Typography, Paper, Button, Theme, WithStyles, withStyles, CircularProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import blue from "@material-ui/core/colors/blue";
-
+import Table from "../../generics/Table/Table.Component";
 import ListGridWithCheckBox from "../../generics/ListGridWithCheckBox.Component";
+import IHeadColumn from "../../../interfaces/headColumn.interface";
 
 
 type DispatchProps = {
@@ -42,7 +43,11 @@ const styles: any = (theme: Theme) => ({
         margin: theme.spacing.unit,
     },
 });
-
+const columns: Array<IHeadColumn> = [
+    { id: "name", numeric: false, disablePadding: true, label: "Nombre/Descripción" },
+    { id: "url", numeric: true, disablePadding: false, label: "Url" },
+    { id: "logo", numeric: true, disablePadding: false, label: "" },
+];
 class Sponsors extends React.Component<SponsorProps, {}> {
 
     componentDidMount(): void {
@@ -55,16 +60,9 @@ class Sponsors extends React.Component<SponsorProps, {}> {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
             (this.props.sponsors.length > 0) &&
-            <ListGridWithCheckBox data={this.props.sponsors} />;
-
+            <Table tableTitle={"Sponsors"} columns={columns} withCheckColumn={true} data={this.props.sponsors} />;
         return (
             <React.Fragment>
-                <Typography variant="headline" component="h3">
-                    Sponsors
-                </Typography>
-                <Typography component="p">
-                    Lista de patrocinadores ya registrados
-                </Typography>
                 <Paper className={this.props.classes.root} elevation={4}>
                     {innerComponent}
                     <Button variant="fab" mini color="secondary" aria-label="add"

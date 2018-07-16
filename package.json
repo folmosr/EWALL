@@ -11,6 +11,7 @@
   "author": "FO",
   "license": "ISC",
   "devDependencies": {
+    "@types/classnames": "^2.2.5",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.4",
     "awesome-typescript-loader": "^5.0.0-1",
