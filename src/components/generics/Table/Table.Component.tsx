@@ -1,35 +1,39 @@
 import * as React from "React";
 import {
-    WithStyles,
-    Theme,
-    withStyles,
     TablePagination,
     Table,
-    TableBody,
-    TableRow,
-    TableCell,
-    Checkbox,
-    Typography
+    TableBody
 } from "../../../../node_modules/@material-ui/core";
-import Avatar from "@material-ui/core/Avatar";
-import { bufferToBase64, getSorting } from "../../../helpers/util";
+import {
+    Theme,
+} from "../../../../node_modules/@material-ui/core";
 import HeadTable from "./HeadTable.Component";
 import ToolBarTable from "./Toolbar.Component";
 
-type Style = {
+type State = {
     order: "asc" | "desc",
     orderBy: string,
     selected: Array<string>,
     page: number,
-    rowsPerPage: number,
+    rowsPerPage: number
 };
-type Props = {
-    data: Array<any>;
+
+type Props<T extends object = object> = {
+    data: Array<T>;
     columns: Array<any>;
     withCheckColumn: boolean;
     tableTitle: string;
+    keys: string[];
+    itemRenderer: (item: T) => JSX.Element
 };
-type PropsWithStyles = Props & WithStyles<"root" | "table" | "tableWrapper">;
+
+const initialState: State = {
+    order: "asc",
+    orderBy: "name",
+    selected: [],
+    page: 0,
+    rowsPerPage: 5,
+};
 
 const styles: any = (theme: Theme) => ({
     root: {
@@ -43,17 +47,12 @@ const styles: any = (theme: Theme) => ({
         overflowX: "auto",
     },
 });
-class TableComponent extends React.Component<PropsWithStyles, Style> {
 
-    constructor(props: PropsWithStyles) {
+export class TableComponent<T extends object = object> extends React.Component<Props<T>, State> {
+
+    constructor(props: Props<T>) {
         super(props);
-        this.state = {
-            order: "asc",
-            orderBy: "name",
-            selected: [],
-            page: 0,
-            rowsPerPage: 5,
-        };
+        this.state = initialState;
     }
 
     handleRequestSort = (property: string) => {
@@ -69,7 +68,7 @@ class TableComponent extends React.Component<PropsWithStyles, Style> {
 
     handleSelectAllClick = (event: React.ChangeEvent, checked: boolean) => {
         if (checked) {
-            this.setState(state => ({ selected: this.props.data.map(n => n._id) }));
+            this.setState({ selected: this.props.keys});
             return;
         }
         this.setState({ selected: [] });
@@ -107,16 +106,12 @@ class TableComponent extends React.Component<PropsWithStyles, Style> {
     isSelected = (id: string) => this.state.selected.indexOf(id) !== -1;
 
     render(): JSX.Element {
-
-        const { classes } = this.props;
-        const { order, orderBy, selected, rowsPerPage, page } = this.state;
-        const emptyRows: number = rowsPerPage - Math.min(rowsPerPage, this.props.data.length - page * rowsPerPage);
-
+       const { order, orderBy, selected, rowsPerPage, page } = this.state;
         return (
             <React.Fragment>
                 <ToolBarTable numSelected={selected.length} headTitle={this.props.tableTitle} />
-                <div className={classes.tableWrapper}>
-                    <Table className={classes.table} aria-labelledby="tableTitle">
+                <div className={styles.tableWrapper}>
+                    <Table className={styles.table} aria-labelledby="tableTitle">
                         <HeadTable
                             withCheckColumn={this.props.withCheckColumn}
                             columns={this.props.columns}
@@ -128,45 +123,7 @@ class TableComponent extends React.Component<PropsWithStyles, Style> {
                             rowCount={this.props.data.length}
                         />
                         <TableBody>
-                            {this.props.data
-                                .sort(getSorting(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map(n => {
-                                    const isSelected: boolean = this.isSelected(n._id);
-                                    return (
-                                        <TableRow
-                                            hover
-                                            onClick={event => this.handleClick(n._id)}
-                                            role="checkbox"
-                                            aria-checked={isSelected}
-                                            tabIndex={-1}
-                                            key={n._id}
-                                            selected={isSelected}>
-                                            <TableCell padding="checkbox">
-                                                <Checkbox checked={isSelected} />
-                                            </TableCell>
-                                            <TableCell component="th" scope="row" padding="none">
-                                                {n.name}
-                                            </TableCell>
-                                            <TableCell numeric>
-                                                <Typography component="p">
-                                                    <a href={n.url} target="_blank">{n.url}</a>
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Avatar
-                                                    alt={`${n.name}`}
-                                                    src={`data:image/jpeg;base64,${bufferToBase64(n.logo.data.data)}`}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            {emptyRows > 0 && (
-                                <TableRow style={{ height: 49 * emptyRows }}>
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
+                            {this.props.data.map(this.props.itemRenderer)}
                         </TableBody>
                     </Table>
                 </div>
@@ -188,4 +145,3 @@ class TableComponent extends React.Component<PropsWithStyles, Style> {
         );
     }
 }
-export default withStyles(styles)(TableComponent);

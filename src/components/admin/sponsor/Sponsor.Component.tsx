@@ -3,13 +3,19 @@ import Store from "../../../store/store.namespace";
 import { loadSponsors } from "../../../actions/sponsors.actions";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Typography, Paper, Button, Theme, WithStyles, withStyles, CircularProgress } from "@material-ui/core";
+import { Paper, Button, Theme, WithStyles, withStyles, CircularProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import blue from "@material-ui/core/colors/blue";
-import Table from "../../generics/Table/Table.Component";
-import ListGridWithCheckBox from "../../generics/ListGridWithCheckBox.Component";
-import IHeadColumn from "../../../interfaces/headColumn.interface";
+import SponsorList from "./SponsorTable.Component";
+import ISponsor from "../../../interfaces/sponsor.interfaces";
 
+
+type TableProps = {
+    data: Array<ISponsor>;
+    columns: Array<any>;
+    withCheckColumn: boolean;
+    tableTitle: string;
+};
 
 type DispatchProps = {
     loadSponsors: typeof loadSponsors;
@@ -43,11 +49,7 @@ const styles: any = (theme: Theme) => ({
         margin: theme.spacing.unit,
     },
 });
-const columns: Array<IHeadColumn> = [
-    { id: "name", numeric: false, disablePadding: true, label: "Nombre/Descripción" },
-    { id: "url", numeric: true, disablePadding: false, label: "Url" },
-    { id: "logo", numeric: true, disablePadding: false, label: "" },
-];
+
 class Sponsors extends React.Component<SponsorProps, {}> {
 
     componentDidMount(): void {
@@ -59,8 +61,7 @@ class Sponsors extends React.Component<SponsorProps, {}> {
     render(): JSX.Element {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
-            (this.props.sponsors.length > 0) &&
-            <Table tableTitle={"Sponsors"} columns={columns} withCheckColumn={true} data={this.props.sponsors} />;
+            <SponsorList data={this.props.sponsors} />;
         return (
             <React.Fragment>
                 <Paper className={this.props.classes.root} elevation={4}>
