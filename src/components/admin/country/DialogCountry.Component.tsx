@@ -18,10 +18,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import ICountry from "../../../interfaces/country.interfaces";
-
+import renderTextField from "../../generics/RenderTextField.Component";
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/validations";
 import { initCountryForm } from "../../../actions/countries.actions";
 import { Dispatch } from "redux";
@@ -37,11 +35,6 @@ type Props = {
     initialValues: ICountry;
 } & DispatchProps;
 type PropsWithStyle = Props & WithStyles<"progress" | "textField" | "dialogContentText">;
-type InputTexField = {
-    className: string
-};
-
-
 const styles: any = (theme: Theme) => ({
     progress: {
         margin: theme.spacing.unit * 2,
@@ -60,24 +53,6 @@ const styles: any = (theme: Theme) => ({
     }
 });
 
-
-const renderTextField: React.StatelessComponent<WrappedFieldProps & InputTexField> = (props: WrappedFieldProps & InputTexField) => {
-    const { className, input, label, meta: { touched, error, asyncValidating, dirty } } = props;
-    return (
-        <React.Fragment><TextField
-            placeholder={label}
-            label={label}
-            {...input}
-            error={(error && touched)}
-            className={className}
-        />
-            {(error && touched) && <FormHelperText error={error} className={className}>{error}</FormHelperText>}
-        </React.Fragment>
-    );
-};
-
-let asyncValidate: any;
-
 class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>, {}> {
 
     constructor(props: PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>) {
@@ -93,7 +68,7 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
             <CircularProgress className={this.props.classes.progress} thickness={7} /></div>) :
             (<React.Fragment>
                 <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
-                    Administra los paises donde el sistema de manejo de eventos está actualmente operando.
+                    Creación/Administración de datos.
                     </DialogContentText>
                 <Field
                     className={this.props.classes.textField}
@@ -117,8 +92,8 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         return (
             <div>
                 <Dialog
-                   disableBackdropClick
-                   disableEscapeKeyDown
+                    disableBackdropClick
+                    disableEscapeKeyDown
                     open={this.props.openDialog}
                     onClose={() => resetAndCloseForm("countryForm", this.props.dispatch)}
                     aria-labelledby="form-dialog-title"

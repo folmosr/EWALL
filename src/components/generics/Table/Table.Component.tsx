@@ -1,6 +1,5 @@
 import * as React from "React";
 import {
-    TablePagination,
     Table,
     TableBody
 } from "../../../../node_modules/@material-ui/core";
@@ -9,13 +8,12 @@ import {
 } from "../../../../node_modules/@material-ui/core";
 import HeadTable from "./HeadTable.Component";
 import ToolBarTable from "./Toolbar.Component";
+import { getSorting } from "../../../helpers/util";
 
 type State = {
     order: "asc" | "desc",
     orderBy: string,
-    selected: Array<string>,
-    page: number,
-    rowsPerPage: number
+    selected: Array<string>
 };
 
 type Props<T extends object = object> = {
@@ -24,15 +22,15 @@ type Props<T extends object = object> = {
     withCheckColumn: boolean;
     tableTitle: string;
     keys: string[];
-    itemRenderer: (item: T) => JSX.Element
+    selected: Array<string>;
+    itemRenderer: (item: T) => JSX.Element;
+    updateSelected: (selected: Array<string>) => void
 };
 
 const initialState: State = {
     order: "asc",
     orderBy: "name",
-    selected: [],
-    page: 0,
-    rowsPerPage: 5,
+    selected: []
 };
 
 const styles: any = (theme: Theme) => ({
@@ -55,6 +53,13 @@ export class TableComponent<T extends object = object> extends React.Component<P
         this.state = initialState;
     }
 
+    static getDerivedStateFromProps(nextProps: Props, prevState: State): State {
+        return {
+            ...prevState,
+            selected: nextProps.selected
+        };
+    }
+
     handleRequestSort = (property: string) => {
         const orderBy: string = property;
         let order: "asc" | "desc" = "desc";
@@ -68,45 +73,14 @@ export class TableComponent<T extends object = object> extends React.Component<P
 
     handleSelectAllClick = (event: React.ChangeEvent, checked: boolean) => {
         if (checked) {
-            this.setState({ selected: this.props.keys});
+            this.props.updateSelected(this.props.keys);
             return;
         }
-        this.setState({ selected: [] });
+        this.props.updateSelected([]);
     }
-
-    handleClick = (id: string) => {
-        const { selected } = this.state;
-        const selectedIndex: number = selected.indexOf(id);
-        let newSelected: Array<string> = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, id);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        this.setState({ selected: newSelected });
-    }
-
-    handleChangePage = (page: number) => {
-        this.setState({ page });
-    }
-
-    handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-        this.setState({ rowsPerPage: Number.parseInt(event.target.value) });
-    }
-
-    isSelected = (id: string) => this.state.selected.indexOf(id) !== -1;
 
     render(): JSX.Element {
-       const { order, orderBy, selected, rowsPerPage, page } = this.state;
+        const { order, orderBy, selected } = this.state;
         return (
             <React.Fragment>
                 <ToolBarTable numSelected={selected.length} headTitle={this.props.tableTitle} />
@@ -123,24 +97,12 @@ export class TableComponent<T extends object = object> extends React.Component<P
                             rowCount={this.props.data.length}
                         />
                         <TableBody>
-                            {this.props.data.map(this.props.itemRenderer)}
+                            {this.props.data
+                                .sort(getSorting(order, orderBy))
+                                .map(this.props.itemRenderer)}
                         </TableBody>
                     </Table>
                 </div>
-                <TablePagination
-                    component="div"
-                    count={this.props.data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    backIconButtonProps={{
-                        "aria-label": "Previous Page",
-                    }}
-                    nextIconButtonProps={{
-                        "aria-label": "Next Page",
-                    }}
-                    onChangePage={() => this.handleChangePage(this.state.page)}
-                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                />
             </React.Fragment>
         );
     }

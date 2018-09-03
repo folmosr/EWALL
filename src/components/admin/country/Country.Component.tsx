@@ -1,4 +1,5 @@
 import * as React from "React";
+import * as ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import { bindActionCreators, Dispatch } from "redux";
 import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
@@ -20,7 +21,6 @@ import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../../interfaces/country.interfaces";
 import ConfirmDialog from "../../generics/confirmationDialog.Component";
-import ReactDOM = require("react-dom");
 
 type State = { selected: ICountry; openConfirm: boolean };
 

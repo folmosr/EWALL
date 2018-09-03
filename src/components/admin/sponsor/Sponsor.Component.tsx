@@ -1,20 +1,19 @@
 import * as React from "React";
+import * as ReactDOM from "react-dom";
 import Store from "../../../store/store.namespace";
 import { loadSponsors } from "../../../actions/sponsors.actions";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Paper, Button, Theme, WithStyles, withStyles, CircularProgress } from "@material-ui/core";
+import { Paper, Button, Theme, WithStyles, withStyles, CircularProgress, Icon, IconButton } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import SyncIcon from "@material-ui/icons/Sync";
 import blue from "@material-ui/core/colors/blue";
 import SponsorList from "./SponsorTable.Component";
-import ISponsor from "../../../interfaces/sponsor.interfaces";
 
-
-type TableProps = {
-    data: Array<ISponsor>;
-    columns: Array<any>;
-    withCheckColumn: boolean;
-    tableTitle: string;
+import DialogSponsor from "./DialogSponsor.Component";
+type State = {
+    selected: Array<string>;
+    openDialog: boolean;
 };
 
 type DispatchProps = {
@@ -25,6 +24,11 @@ type SponsorProps = Store.Types.SponsorComponentType & DispatchProps & WithStyle
 
 const actions: DispatchProps = {
     loadSponsors,
+};
+
+const initialState: State = {
+    selected: [],
+    openDialog: false
 };
 
 const styles: any = (theme: Theme) => ({
@@ -50,7 +54,12 @@ const styles: any = (theme: Theme) => ({
     },
 });
 
-class Sponsors extends React.Component<SponsorProps, {}> {
+class Sponsors extends React.Component<SponsorProps, State> {
+
+    constructor(props: SponsorProps) {
+        super(props);
+        this.state = initialState;
+    }
 
     componentDidMount(): void {
         if (this.props.loadSponsors) {
@@ -58,20 +67,36 @@ class Sponsors extends React.Component<SponsorProps, {}> {
         }
     }
 
+    setSelected = (selected: Array<string> = []) => {
+        this.setState({ selected });
+    }
+
+    handleClickOpen = () => {
+        this.setState({ openDialog: true });
+    }
+
     render(): JSX.Element {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
-            <SponsorList data={this.props.sponsors} />;
+            <SponsorList data={this.props.sponsors} setSelected={this.setSelected} elements={this.state.selected} />;
+        let iconButton: JSX.Element = (this.state.selected.length === 1) ? <SyncIcon /> : <AddIcon />;
         return (
             <React.Fragment>
                 <Paper className={this.props.classes.root} elevation={4}>
                     {innerComponent}
                     <Button variant="fab" mini color="secondary" aria-label="add"
                         className={this.props.classes.fab}
+                        onClick={this.handleClickOpen}
                     >
-                        <AddIcon />
+                        {iconButton}
                     </Button>
                 </Paper>
+                {ReactDOM.createPortal(<DialogSponsor
+                    openDialog={this.state.openDialog}
+                />,
+                    document.getElementById("portal-container")
+                )
+                }
             </React.Fragment>
         );
     }
