@@ -1,7 +1,7 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
 import Store from "../../../store/store.namespace";
-import { loadSponsors } from "../../../actions/sponsors.actions";
+import { loadSponsors, initSponsorForm } from "../../../actions/sponsors.actions";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import { Paper, Button, Theme, WithStyles, withStyles, CircularProgress, Icon, IconButton } from "@material-ui/core";
@@ -11,6 +11,7 @@ import blue from "@material-ui/core/colors/blue";
 import SponsorList from "./SponsorTable.Component";
 
 import DialogSponsor from "./DialogSponsor.Component";
+import ISponsor, { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
 type State = {
     selected: Array<string>;
     openDialog: boolean;
@@ -18,12 +19,14 @@ type State = {
 
 type DispatchProps = {
     loadSponsors: typeof loadSponsors;
+    initSponsorForm: typeof initSponsorForm;
 };
 
 type SponsorProps = Store.Types.SponsorComponentType & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab">;
 
 const actions: DispatchProps = {
     loadSponsors,
+    initSponsorForm
 };
 
 const initialState: State = {
@@ -67,12 +70,22 @@ class Sponsors extends React.Component<SponsorProps, State> {
         }
     }
 
+    submit = (value: ISponsorForm): void => {
+    }
+
     setSelected = (selected: Array<string> = []) => {
         this.setState({ selected });
     }
 
     handleClickOpen = () => {
-        this.setState({ openDialog: true });
+        this.props.initSponsorForm(
+            {
+                name: null,
+                url: null,
+                logo: null,
+                _id: null
+            },
+            true);
     }
 
     render(): JSX.Element {
@@ -92,7 +105,9 @@ class Sponsors extends React.Component<SponsorProps, State> {
                     </Button>
                 </Paper>
                 {ReactDOM.createPortal(<DialogSponsor
-                    openDialog={this.state.openDialog}
+                    loading={this.props.loading}
+                    onSubmit={this.submit}
+                    initSponsorForm={this.props.initSponsorForm}
                 />,
                     document.getElementById("portal-container")
                 )

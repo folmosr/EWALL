@@ -23,10 +23,11 @@ import renderTextField from "../../generics/RenderTextField.Component";
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/validations";
 import { initCountryForm } from "../../../actions/countries.actions";
 import { Dispatch } from "redux";
+import { InitFomrAction } from "../../../types/sponsorsActionsTypes";
 
 type DispatchProps = {
     onSubmit: (value: ICountry) => void
-    dispatch: Dispatch<any>
+    dispatch: Dispatch<InitFomrAction>
 };
 type Props = {
     loading: boolean;

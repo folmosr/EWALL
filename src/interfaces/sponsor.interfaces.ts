@@ -6,3 +6,10 @@ export default interface ISponsor {
     create_at?: Date;
     [index: string]: string | object;
 }
+export interface ISponsorForm {
+    _id: string;
+    name: string;
+    url: string;
+    logo: string;
+    create_at?: Date;
+}

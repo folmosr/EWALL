@@ -1,6 +1,6 @@
-import { LoadSponsorAction, FullfilledSponsorAction } from "../types/sponsorsActionsTypes";
+import { LoadSponsorAction, FullfilledSponsorAction, InitFomrAction } from "../types/sponsorsActionsTypes";
 import ActionsTypesEnum from "../enums/sponsorsActionsTypes.enum";
-import ISponsor from "../interfaces/sponsor.interfaces";
+import ISponsor, { ISponsorForm } from "../interfaces/sponsor.interfaces";
 
 function loadSponsors(): LoadSponsorAction {
     return {
@@ -17,4 +17,11 @@ function fullfilledSponsors(sponsors: Array<ISponsor>): FullfilledSponsorAction 
     };
 }
 
-export { loadSponsors, fullfilledSponsors };
+function initSponsorForm(sponsor: ISponsorForm, open?:boolean): InitFomrAction {
+    return {
+        type: ActionsTypesEnum.INIT_FORM,
+        sponsor,
+        open
+    };
+}
+export { loadSponsors, fullfilledSponsors, initSponsorForm };

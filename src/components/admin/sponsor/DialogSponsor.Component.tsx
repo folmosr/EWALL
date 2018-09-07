@@ -5,7 +5,8 @@ import {
     InjectedFormProps,
     DecoratedComponentClass,
     WrappedFieldProps,
-    reset
+    reset,
+    formValueSelector
 } from "redux-form";
 import { connect } from "react-redux";
 import Store from "../../../store/store.namespace";
@@ -21,17 +22,28 @@ import renderTextField from "../../generics/RenderTextField.Component";
 import { Avatar } from "../../../../node_modules/@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
-import ISponsor from "../../../interfaces/sponsor.interfaces";
-
+import { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
+import { initSponsorForm } from "../../../actions/sponsors.actions";
 import { required, justLetter } from "../../../helpers/validations";
 import { Dispatch } from "redux";
-import { AvatarProps } from "../../../../node_modules/@material-ui/core/Avatar";
-import RootRef from "@material-ui/core/RootRef";
+import { InitFomrAction } from "../../../types/sponsorsActionsTypes";
+
+type DispatchProps = {
+    onSubmit: (value: ISponsorForm) => void
+    dispatch: Dispatch<InitFomrAction>
+};
 
 type Props = {
+    loading: boolean;
     openDialog: boolean;
     children?: React.ReactNode;
-};
+    initialValues: ISponsorForm;
+    nameFormValue: string;
+    urlFormValue: string;
+    idSponsorFormValue: string;
+    logoFormValue: string;
+    initSponsorForm: (values: ISponsorForm, open: boolean) => void
+} & DispatchProps;
 
 type PropsWithStyle = Props & WithStyles<
     "progress" |
@@ -77,37 +89,40 @@ const styles: any = (theme: Theme) => ({
     },
 });
 
-class DialogSponsor extends React.Component<PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>, {}> {
+type globalProps = PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>;
 
-    private avatarRef: React.RefObject<HTMLDivElement>;
+class DialogSponsor extends React.Component<globalProps, {}> {
 
-    constructor(props: PropsWithStyle &
-        WrappedFieldProps &
-        InjectedFormProps<{}, PropsWithStyle>) {
+    private avatarDOMRef: React.RefObject<HTMLDivElement>;
+
+    constructor(props: globalProps) {
         super(props);
-        this.avatarRef = React.createRef<HTMLDivElement>();
+        this.avatarDOMRef = React.createRef<HTMLDivElement>();
     }
+
     previewThumbnail = (e: React.FormEvent<HTMLInputElement>) => {
         let file: Blob = e.currentTarget.files[0];
         let reader: FileReader = new FileReader();
-        if (this.avatarRef !== null) {
-            (function (img: React.Ref<any>, reader: FileReader): void {
-                reader.addEventListener("load", function (): void {
-                    console.log(img);
-                }, false);
-            })(this.avatarRef, reader);
-        }
+        ((props: globalProps) =>
+            reader.addEventListener("loadend", function (): void {
+                props.initSponsorForm({
+                    name: props.nameFormValue,
+                    url: props.urlFormValue,
+                    logo: this.result.toString(),
+                    _id: props.idSponsorFormValue
+                }, true);
+            }, true)
+        )(this.props);
         if (file) {
-            reader.readAsArrayBuffer(file);
+            reader.readAsDataURL(file);
         }
     }
 
-    componentDidMount(): void {
-        const node:HTMLDivElement = this.avatarRef.current!;
-        console.log(node);
+    componentDidUpdate(): void {
     }
 
     render(): JSX.Element {
+        let avatarJSX: JSX.Element = (this.props.logoFormValue == null) ? <Avatar className={this.props.classes.avatar}>A</Avatar> : <Avatar className={this.props.classes.avatar} src={this.props.logoFormValue} />
         return (<div>
             <Dialog
                 disableBackdropClick
@@ -116,39 +131,41 @@ class DialogSponsor extends React.Component<PropsWithStyle & WrappedFieldProps &
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">Registro</DialogTitle>
-                <DialogContent>
-                    <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
-                        Creación/Administración de datos.
+                <form onSubmit={this.props.handleSubmit}>
+                    <DialogContent>
+                        <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
+                            Creación/Administración de datos.
                     </DialogContentText>
-                    <div ref={this.avatarRef} className={this.props.classes.row}>
-                        <Avatar className={this.props.classes.avatar}>A</Avatar>
-                    </div>
-                    <Field
-                        className={this.props.classes.textField}
-                        name="name"
-                        label="Nombre"
-                        component={renderTextField}
-                        validate={[required, justLetter]} />
-                    <Field
-                        className={this.props.classes.textField}
-                        name="url"
-                        label="Url"
-                        component={renderTextField}
-                        validate={[required]} />
-                    <label htmlFor="flat-button-file">
-                        <Button color="secondary"
-                            component="span"
-                            className={this.props.classes.button}>
-                            <CloudUploadIcon className={this.props.classes.extendedIcon} />
-                            Avatar
+                        <div ref={this.avatarDOMRef} className={this.props.classes.row}>
+                            {avatarJSX}
+                        </div>
+                        <Field
+                            className={this.props.classes.textField}
+                            name="name"
+                            label="Nombre"
+                            component={renderTextField}
+                            validate={[required, justLetter]} />
+                        <Field
+                            className={this.props.classes.textField}
+                            name="url"
+                            label="Url"
+                            component={renderTextField}
+                            validate={[required]} />
+                        <label htmlFor="flat-button-file">
+                            <Button color="secondary"
+                                component="span"
+                                className={this.props.classes.button}>
+                                <CloudUploadIcon className={this.props.classes.extendedIcon} />
+                                Avatar
                         </Button>
-                    </label>
-                </DialogContent>
-                <DialogActions>
-                    <Button type="button"
-                        color="secondary">Cancelar</Button>
-                    <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
-                </DialogActions>
+                        </label>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button type="button" onClick={() => resetAndCloseForm("sponsorForm", this.props.dispatch)}
+                            color="secondary">Cancelar</Button>
+                        <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
+                    </DialogActions>
+                </form>
             </Dialog>
             <input
                 accept="image/*"
@@ -162,9 +179,28 @@ class DialogSponsor extends React.Component<PropsWithStyle & WrappedFieldProps &
     }
 }
 
+const resetAndCloseForm: (v: string, dispatch: Dispatch<any>) => any = (form: string, dispatch: Dispatch<any>): any => {
+    dispatch(reset(form));
+    dispatch(initSponsorForm({
+        _id: null,
+        name: null,
+        url: null,
+        logo: null
+    }, false));
+};
 let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
         form: "sponsorForm",
-        enableReinitialize: true,
+        enableReinitialize: true
     })(DialogSponsor);
-export default withStyles(styles)<Props>(DialogSponsorForm);
+const selector = formValueSelector("sponsorForm")
+export default connect(
+    (state: Store.Types.All) => ({
+        initialValues: state.SponsorData.sponsor,
+        openDialog: state.SponsorData.open,
+        nameFormValue: selector(state, "name"),
+        urlFormValue: selector(state, "url"),
+        logoFormValue: selector(state, "logo"),
+        idSponsorFormValue: selector(state, "_id")
+    }),
+)(withStyles(styles)<Props>(DialogSponsorForm));
