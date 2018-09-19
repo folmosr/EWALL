@@ -35,8 +35,9 @@ namespace Store {
                 _id?: string,
                 name: string,
                 url: string,
-                logo: string
+                imageBase64Encode: string
             },
+            loading?:boolean,
             open: boolean
         };
 
@@ -59,7 +60,7 @@ namespace Store {
     export const sponsorForm: ISponsorForm = {
         name: null,
         url: null,
-        logo: null,
+        imageBase64Encode: null,
         _id: null
     };
 

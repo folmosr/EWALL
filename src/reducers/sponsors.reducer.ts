@@ -2,18 +2,19 @@ import Store from "../store/store.namespace";
 import ActionsTypesEnum from "../enums/sponsorsActionsTypes.enum";
 import {
     LoadSponsorAction,
-    FullfilledSponsorAction
-}
-    from "../types/sponsorsActionsTypes";
-import {
-    InitFomrAction
+    FullfilledSponsorAction,
+    AddSponsorAction,
+    InitFormAction,
+    DeleteSponsorAction
 }
     from "../types/sponsorsActionsTypes";
 
 type actions = (
-    InitFomrAction
+    InitFormAction
     | LoadSponsorAction
     | FullfilledSponsorAction
+    | AddSponsorAction
+    | DeleteSponsorAction
 );
 
 const initialState: Store.Types.SponsorComponentType = Store.SponsorComponent;
@@ -25,6 +26,7 @@ function sponsorReducer(state: Store.Types.SponsorComponentType = initialState, 
             return state;
         case ActionsTypesEnum.FULFILLED_SPONSORS:
             return { loading: action.loading, sponsors: action.sponsors };
+        case ActionsTypesEnum.DELETE_SPONSOR:
         default:
             return state;
     }
@@ -38,10 +40,12 @@ function sponsorFormReducer(state: Store.Types.SponsorForm = initialFormState, a
                     _id: action.sponsor._id,
                     name: action.sponsor.name,
                     url: action.sponsor.url,
-                    logo: action.sponsor.logo
+                    imageBase64Encode: action.sponsor.imageBase64Encode
                 },
                 open: action.open
             };
+        case ActionsTypesEnum.ADD_SPONSOR:
+            return { loading: action.loading, sponsor: action.sponsor, open: false };
         default:
             return state;
     }

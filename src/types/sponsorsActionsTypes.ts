@@ -14,8 +14,20 @@ export type FullfilledSponsorAction = {
     loading: boolean
 };
 
-export type InitFomrAction = {
+export type InitFormAction = {
     type: SponsorActionTypeEnum.INIT_FORM,
     sponsor: ISponsorForm,
     open: boolean
+};
+
+export type AddSponsorAction = {
+    type: SponsorActionTypeEnum.ADD_SPONSOR,
+    sponsor: ISponsorForm,
+    loading: boolean
+};
+
+export type DeleteSponsorAction = {
+    type: SponsorActionTypeEnum.DELETE_SPONSOR,
+    documents: Array<string>,
+    loading: boolean
 };

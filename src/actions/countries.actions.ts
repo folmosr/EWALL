@@ -3,7 +3,7 @@ import {
     FulfilledCountryAction,
     AddCountryAction,
     UpdatedCountryAction,
-    InitFomrAction,
+    InitFormAction,
     DeleteCountryAction
 } from "../types/countriesActionsTypes";
 import ICountry from "../interfaces/country.interfaces";
@@ -49,7 +49,7 @@ function updatedCountries(countries: Array<ICountry>): UpdatedCountryAction {
     };
 }
 
-function initCountryForm(country: ICountry, open?:boolean): InitFomrAction {
+function initCountryForm(country: ICountry, open?:boolean): InitFormAction {
     return {
         type: ActionsTypesEnum.INIT_FORM,
         country,

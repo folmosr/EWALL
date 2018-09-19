@@ -24,7 +24,9 @@ type Props<T extends object = object> = {
     keys: string[];
     selected: Array<string>;
     itemRenderer: (item: T) => JSX.Element;
-    updateSelected: (selected: Array<string>) => void
+    updateSelected: (selected: Array<string>) => void;
+    openFormSelected: () => void,
+    deleteElements: () => void
 };
 
 const initialState: State = {
@@ -83,7 +85,12 @@ export class TableComponent<T extends object = object> extends React.Component<P
         const { order, orderBy, selected } = this.state;
         return (
             <React.Fragment>
-                <ToolBarTable numSelected={selected.length} headTitle={this.props.tableTitle} />
+                <ToolBarTable
+                    numSelected={selected.length}
+                    headTitle={this.props.tableTitle}
+                    openFormSelected={this.props.openFormSelected}
+                    deleteElements={this.props.deleteElements}
+                />
                 <div className={styles.tableWrapper}>
                     <Table className={styles.table} aria-labelledby="tableTitle">
                         <HeadTable

@@ -29,7 +29,7 @@ export type UpdatedCountryAction = {
     loading: boolean
 };
 
-export type InitFomrAction = {
+export type InitFormAction = {
     type: ActionsTypesEnum.INIT_FORM,
     country: ICountry,
     open: boolean

@@ -1,7 +1,9 @@
 enum SponsorActionTypeEnum {
     LOAD_SPONSORS = "LOAD_SPONSORS",
     FULFILLED_SPONSORS = "FULFILLED_SPONSORS",
-    INIT_FORM = "INIT_FORM_SPONSOR"
+    INIT_FORM = "INIT_FORM_SPONSOR",
+    ADD_SPONSOR = "ADD_SPONSOR",
+    DELETE_SPONSOR = "DELETE_SPONSOR"
 }
 
 export default SponsorActionTypeEnum;

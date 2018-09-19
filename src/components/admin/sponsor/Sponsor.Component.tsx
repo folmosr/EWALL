@@ -1,37 +1,52 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
 import Store from "../../../store/store.namespace";
-import { loadSponsors, initSponsorForm } from "../../../actions/sponsors.actions";
+import {
+    loadSponsors,
+    initSponsorForm,
+    addSponsor,
+    deleteSponsor
+} from "../../../actions/sponsors.actions";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "redux";
-import { Paper, Button, Theme, WithStyles, withStyles, CircularProgress, Icon, IconButton } from "@material-ui/core";
+import {
+    Paper,
+    Button,
+    Theme,
+    WithStyles,
+    withStyles,
+    CircularProgress
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import SyncIcon from "@material-ui/icons/Sync";
 import blue from "@material-ui/core/colors/blue";
 import SponsorList from "./SponsorTable.Component";
 
-import DialogSponsor from "./DialogSponsor.Component";
-import ISponsor, { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
+import DialogSponsor from "./dialogSponsor.Component";
+import { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
+
 type State = {
     selected: Array<string>;
-    openDialog: boolean;
 };
 
 type DispatchProps = {
     loadSponsors: typeof loadSponsors;
     initSponsorForm: typeof initSponsorForm;
+    addSponsor: typeof addSponsor;
+    deleteSponsor: typeof deleteSponsor;
 };
 
 type SponsorProps = Store.Types.SponsorComponentType & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab">;
 
 const actions: DispatchProps = {
     loadSponsors,
-    initSponsorForm
+    initSponsorForm,
+    addSponsor,
+    deleteSponsor
 };
 
 const initialState: State = {
-    selected: [],
-    openDialog: false
+    selected: []
 };
 
 const styles: any = (theme: Theme) => ({
@@ -71,10 +86,16 @@ class Sponsors extends React.Component<SponsorProps, State> {
     }
 
     submit = (value: ISponsorForm): void => {
+        value.imageBase64Encode = value.imageBase64Encode.split(",").pop();
+        this.props.addSponsor(value);
     }
 
     setSelected = (selected: Array<string> = []) => {
         this.setState({ selected });
+    }
+
+    deleteSponsors = (selected: Array<string> = []): void => {
+        this.props.deleteSponsor(selected);
     }
 
     handleClickOpen = () => {
@@ -82,7 +103,7 @@ class Sponsors extends React.Component<SponsorProps, State> {
             {
                 name: null,
                 url: null,
-                logo: null,
+                imageBase64Encode: null,
                 _id: null
             },
             true);
@@ -91,7 +112,7 @@ class Sponsors extends React.Component<SponsorProps, State> {
     render(): JSX.Element {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
-            <SponsorList data={this.props.sponsors} setSelected={this.setSelected} elements={this.state.selected} />;
+            <SponsorList data={this.props.sponsors} initSponsorForm={this.props.initSponsorForm} setSelected={this.setSelected} deleteSelected={this.deleteSponsors} elements={this.state.selected} />;
         let iconButton: JSX.Element = (this.state.selected.length === 1) ? <SyncIcon /> : <AddIcon />;
         return (
             <React.Fragment>
@@ -107,7 +128,6 @@ class Sponsors extends React.Component<SponsorProps, State> {
                 {ReactDOM.createPortal(<DialogSponsor
                     loading={this.props.loading}
                     onSubmit={this.submit}
-                    initSponsorForm={this.props.initSponsorForm}
                 />,
                     document.getElementById("portal-container")
                 )

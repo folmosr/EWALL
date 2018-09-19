@@ -3,12 +3,14 @@ import * as classNames from "classnames";
 import { WithStyles, Theme, withStyles, Toolbar, Typography, Tooltip, IconButton } from "../../../../node_modules/@material-ui/core";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import DeleteIcon from "@material-ui/icons/Delete";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import EditIcon from "@material-ui/icons/Edit";
 
 type Props = {
     numSelected: number;
     headTitle: string;
-    children?: React.ReactNode
+    children?: React.ReactNode;
+    openFormSelected: () => void,
+    deleteElements: () => void
 };
 type PropsWithStyles = Props & WithStyles<"root" | "highlight" | "spacer" | "actions" | "title">;
 
@@ -31,13 +33,14 @@ const styles: any = (theme: Theme) => ({
     },
     actions: {
         color: theme.palette.text.secondary,
+        display: "inline-flex"
     },
     title: {
         flex: "0 0 auto",
     },
 });
 
-const ToolBarTable: React.StatelessComponent<PropsWithStyles> = ({ numSelected, headTitle, classes }): JSX.Element => {
+const ToolBarTable: React.StatelessComponent<PropsWithStyles> = ({ numSelected, headTitle, openFormSelected, deleteElements, classes }): JSX.Element => {
     return (
         <Toolbar
             className={classNames(classes.root, {
@@ -62,11 +65,18 @@ const ToolBarTable: React.StatelessComponent<PropsWithStyles> = ({ numSelected, 
             <div className={classes.spacer} />
             <div className={classes.actions}>
                 {numSelected > 0 ? (
-                    <Tooltip title="Delete">
-                        <IconButton aria-label="Delete">
-                            <DeleteIcon />
-                        </IconButton>
-                    </Tooltip>
+                    <React.Fragment>
+                        <Tooltip title="Actualizar">
+                            <IconButton aria-label="Edit" onClick={() => openFormSelected()} disabled={!(numSelected === 1)}>
+                                <EditIcon />
+                            </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Eliminar">
+                            <IconButton aria-label="Delete" onClick={() => deleteElements()}>
+                                <DeleteIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </React.Fragment>
                 ) : null}
             </div>
         </Toolbar>

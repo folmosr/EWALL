@@ -5,12 +5,12 @@ import {
     FulfilledCountryAction,
     AddCountryAction,
     UpdatedCountryAction,
-    InitFomrAction,
+    InitFormAction,
     DeleteCountryAction
 } from "../types/countriesActionsTypes";
 
 type actions = (
-    InitFomrAction
+    InitFormAction
     | LoadCountryAction
     | FulfilledCountryAction
     | AddCountryAction

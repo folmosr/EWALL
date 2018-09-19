@@ -10,6 +10,6 @@ export interface ISponsorForm {
     _id: string;
     name: string;
     url: string;
-    logo: string;
+    imageBase64Encode: string;
     create_at?: Date;
 }

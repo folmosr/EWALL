@@ -1,4 +1,4 @@
-export const bufferToBase64: (buffer: Array<number>) => String = (buf: Array<number>): String => {
+export const bufferToBase64: (buffer: Array<number>) => String = (buf: Array<number>): string => {
     var binstr: string = Array.prototype.map.call(buf, function (ch: number): string {
         return String.fromCharCode(ch);
     }).join("");

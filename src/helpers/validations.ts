@@ -11,6 +11,11 @@ export const justLetter: (value: string) => undefined | string = (value: string)
     return (REGEX.test(value)) ? undefined : "Sólo letras (mínimo 3 caracteres)";
 };
 
+export const isValidURL: (value: string) => undefined | string = (value: string) => {
+    const REGEX: RegExp =  /^(ftp|http|https):\/\/[^ "]+$/y;
+    return (REGEX.test(value)) ? undefined : "URL inválida";
+};
+
 export const asyncValidateCountry: (value: ICountry) => Promise<void> = async (value: ICountry) => {
     await api<Array<ICountry>>(`http://localhost:3000/api/countries/${value.code}`)
         .then(response => {

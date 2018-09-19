@@ -24,13 +24,13 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
 import { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
 import { initSponsorForm } from "../../../actions/sponsors.actions";
-import { required, justLetter } from "../../../helpers/validations";
+import { required, justLetter, isValidURL } from "../../../helpers/validations";
 import { Dispatch } from "redux";
-import { InitFomrAction } from "../../../types/sponsorsActionsTypes";
+import { InitFormAction } from "../../../types/sponsorsActionsTypes";
 
 type DispatchProps = {
     onSubmit: (value: ISponsorForm) => void
-    dispatch: Dispatch<InitFomrAction>
+    dispatch: Dispatch<InitFormAction>
 };
 
 type Props = {
@@ -42,7 +42,6 @@ type Props = {
     urlFormValue: string;
     idSponsorFormValue: string;
     logoFormValue: string;
-    initSponsorForm: (values: ISponsorForm, open: boolean) => void
 } & DispatchProps;
 
 type PropsWithStyle = Props & WithStyles<
@@ -93,26 +92,19 @@ type globalProps = PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, Pr
 
 class DialogSponsor extends React.Component<globalProps, {}> {
 
-    private avatarDOMRef: React.RefObject<HTMLDivElement>;
-
     constructor(props: globalProps) {
         super(props);
-        this.avatarDOMRef = React.createRef<HTMLDivElement>();
     }
 
     previewThumbnail = (e: React.FormEvent<HTMLInputElement>) => {
         let file: Blob = e.currentTarget.files[0];
         let reader: FileReader = new FileReader();
-        ((props: globalProps) =>
+        ((props: globalProps, input:HTMLInputElement) =>
             reader.addEventListener("loadend", function (): void {
-                props.initSponsorForm({
-                    name: props.nameFormValue,
-                    url: props.urlFormValue,
-                    logo: this.result.toString(),
-                    _id: props.idSponsorFormValue
-                }, true);
+                props.change("imageBase64Encode", this.result.toString());
+                input.value = null;
             }, true)
-        )(this.props);
+        )(this.props, e.currentTarget);
         if (file) {
             reader.readAsDataURL(file);
         }
@@ -136,7 +128,7 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                         <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
                             Creación/Administración de datos.
                     </DialogContentText>
-                        <div ref={this.avatarDOMRef} className={this.props.classes.row}>
+                        <div className={this.props.classes.row}>
                             {avatarJSX}
                         </div>
                         <Field
@@ -150,7 +142,7 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                             name="url"
                             label="Url"
                             component={renderTextField}
-                            validate={[required]} />
+                            validate={[required,isValidURL]} />
                         <label htmlFor="flat-button-file">
                             <Button color="secondary"
                                 component="span"
@@ -185,13 +177,17 @@ const resetAndCloseForm: (v: string, dispatch: Dispatch<any>) => any = (form: st
         _id: null,
         name: null,
         url: null,
-        logo: null
+        imageBase64Encode: null
     }, false));
+};
+const afterSubmit: any = (result: any, dispatch: any) => {
+    resetAndCloseForm("sponsorForm", dispatch);
 };
 let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
         form: "sponsorForm",
-        enableReinitialize: true
+        enableReinitialize: true,
+        onSubmitSuccess: afterSubmit
     })(DialogSponsor);
 const selector = formValueSelector("sponsorForm")
 export default connect(
@@ -200,7 +196,7 @@ export default connect(
         openDialog: state.SponsorData.open,
         nameFormValue: selector(state, "name"),
         urlFormValue: selector(state, "url"),
-        logoFormValue: selector(state, "logo"),
+        logoFormValue: selector(state, "imageBase64Encode"),
         idSponsorFormValue: selector(state, "_id")
     }),
 )(withStyles(styles)<Props>(DialogSponsorForm));
