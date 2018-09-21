@@ -26,6 +26,7 @@
   "dependencies": {
     "@material-ui/core": "^1.1.0",
     "@material-ui/icons": "^1.1.0",
+    "@types/lodash": "^4.14.116",
     "@types/react-redux": "^5.0.16",
     "@types/react-router-dom": "^4.2.6",
     "@types/redux-form": "^7.2.5",

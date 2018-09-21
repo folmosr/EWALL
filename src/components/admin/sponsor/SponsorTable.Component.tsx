@@ -1,5 +1,6 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
+import { Observable } from "rxjs";
 import ISponsor, { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
 import { TableComponent } from "../../generics/Table/Table.Component";
 import IHeadColumn from "../../../interfaces/headColumn.interface";
@@ -14,8 +15,9 @@ import {
 import ConfirmDialog from "../../generics/confirmationDialog.Component";
 import { bufferToBase64 } from "../../../helpers/util";
 import { InitFormAction } from "../../../types/sponsorsActionsTypes";
+import _ = require("lodash");
 
-const initialState = { openConfirm: false }
+const initialState = { openConfirm: false, dblClick: false }
 
 type PropsTable = {
     data: Array<ISponsor>;
@@ -37,6 +39,7 @@ class SponsorTable extends TableComponent<ISponsor> { }
 class SponsorList extends React.Component<PropsTable, State> implements ITable {
 
     readonly state: State = initialState;
+    debouncedClickEvents: Array<any>;
 
     constructor(props: PropsTable) {
         super(props);
@@ -104,6 +107,24 @@ class SponsorList extends React.Component<PropsTable, State> implements ITable {
         this.props.initSponsorForm(sponsor, true);
     }
 
+    onClickEventOnRow = (item: ISponsor): void => {
+        this.debouncedClickEvents = this.debouncedClickEvents || [];
+        const callback = _.debounce(_ => {
+            this.handleClick(item._id);
+            this.debouncedClickEvents = [];
+        }, 250);
+        this.debouncedClickEvents.push(callback);
+        callback(_);
+    }
+
+    onDoubleClicked = (item: ISponsor): void => {
+        if (this.debouncedClickEvents.length > 0) {
+            _.map(this.debouncedClickEvents, (debounce) => debounce.cancel());
+            this.debouncedClickEvents = [];
+        }
+        this.openFormDialog(item);
+    }
+
     render(): JSX.Element {
 
         return (
@@ -123,11 +144,11 @@ class SponsorList extends React.Component<PropsTable, State> implements ITable {
                         return (<TableRow
                             hover
                             role="checkbox"
-                            onClick={() => this.handleClick(item._id)}
+                            onClick={() => this.onClickEventOnRow(item)}
+                            onDoubleClick={() => this.onDoubleClicked(item)}
                             aria-checked={isSelected}
                             tabIndex={-1}
                             key={item._id}
-                            onDoubleClick={() => this.openFormDialog(item)}
                             selected={isSelected}>
                             <TableCell padding="checkbox">
                                 <Checkbox checked={isSelected} />
