@@ -102,28 +102,28 @@ class Countries extends React.Component<CountryProps, State> {
 
     handleClickOpen = () => {
         this.props.initCountryForm({
-            _id: undefined,
-            name: undefined,
-            code: undefined,
-            currency: undefined
-        }, true);
-    }
-
-    asyncValidate = async (value: ICountry) => {
-        const sleep: any = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-        await sleep(1000);
-        let founded: ICountry = this.props.countries.find((element: ICountry) => element.name === value.name)
-        if (founded && !value._id) {
-            return Promise.reject({ name: `Nombre de país ${value.name} existente` });
-        }
+            _id: null,
+            name: null,
+            code: null,
+            currency: null,
+            open: true
+        });
     }
 
     submit = (value: ICountry): void => {
         this.props.addCountry(value);
+        this.props.initCountryForm({
+            _id: null,
+            name: null,
+            code: null,
+            currency: null,
+            open: false
+        });
     }
 
     onSelect = (selected: ICountry): any => {
-        this.props.initCountryForm(selected, true);
+        selected.open = true;
+        this.props.initCountryForm(selected);
     }
 
     onDelete = (selected: ICountry): any => {
@@ -170,6 +170,7 @@ class Countries extends React.Component<CountryProps, State> {
                 {ReactDOM.createPortal(<DialogCountries
                     loading={this.props.loading}
                     onSubmit={this.submit}
+                    initForm={this.props.initCountryForm}
                 />,
                     document.getElementById("portal-container")
                 )

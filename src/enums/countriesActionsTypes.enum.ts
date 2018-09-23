@@ -4,7 +4,7 @@ enum ActionsTypesEnum {
     ADD_COUNTRY = "ADD_COUNTRY",
     UPDATED_COUNTRIES = "UPDATED_COUNTRIES",
     DELETE_COUNTRY = "DELETE_COUNTRY",
-    INIT_FORM = "INIT_FORM",
+    INIT_FORM = "INIT_FORM"
 }
 
 export default ActionsTypesEnum;

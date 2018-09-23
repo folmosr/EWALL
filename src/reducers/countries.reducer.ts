@@ -19,7 +19,7 @@ type actions = (
 
 const initialState: Store.Types.CountryComponentType = Store.CountryComponent;
 
-const initialFormState: Store.Types.CountryForm = {country:Store.country, open:false};
+const initialFormState: Store.Types.CountryForm = { country: Store.country };
 
 function countriesReducer(state: Store.Types.CountryComponentType = initialState, action: actions): Store.Types.CountryComponentType {
     switch (action.type) {
@@ -46,9 +46,9 @@ function countryFormReducer(state: Store.Types.CountryForm = initialFormState, a
                     _id: action.country._id,
                     name: action.country.name,
                     code: action.country.code,
-                    currency: action.country.currency
+                    currency: action.country.currency,
+                    open: action.country.open
                 },
-                open: action.open
             };
         default:
             return state;

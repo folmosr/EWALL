@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import HomeIcon from "@material-ui/icons/Home";
 import LanguageIcon from "@material-ui/icons/Language";
 import ThumbsUpDown from "@material-ui/icons/ThumbsUpDown";
+import ViewWeek from "@material-ui/icons/ViewWeek";
 
 const styles: any = (theme: any) => ({
   root: {
@@ -31,7 +32,7 @@ const MenuListComponent: React.SFC<any> = (props: any) => {
             <HomeIcon />
           </ListItemIcon>
           <ListItemText disableTypography primary={<Link to="/" className={classes.a} > Home </Link>} />
-        </ListItem>
+        </ListItem>        
         <ListItem button>
           <ListItemIcon>
             <LanguageIcon />
@@ -40,9 +41,15 @@ const MenuListComponent: React.SFC<any> = (props: any) => {
         </ListItem>
         <ListItem button>
           <ListItemIcon>
+            <ViewWeek />
+          </ListItemIcon>
+          <ListItemText primary={<Link to="/categories" className={classes.a} > Categorías </Link>} />
+        </ListItem>
+        <ListItem button>
+          <ListItemIcon>
             <ThumbsUpDown />
           </ListItemIcon>
-          <ListItemText primary={<Link to="/sponsors" className={classes.a} > Sponsors </Link>} />
+          <ListItemText primary={<Link to="/sponsors" className={classes.a} > Patrocinadores </Link>} />
         </ListItem>
       </List>
       <Divider />

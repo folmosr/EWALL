@@ -9,7 +9,7 @@ import configureStore from "./store/configStore";
 const initialState: Store.Types.All = {
     CountryComponent: Store.CountryComponent,
     SponsorComponent: Store.SponsorComponent,
-    CountryData: { country: Store.country, open: false },
+    CountryData: { country: Store.country },
     SponsorData: { sponsor: Store.sponsorForm, open: false }
 };
 

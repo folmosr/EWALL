@@ -1,6 +1,6 @@
 import * as React from "React";
 import * as classNames from "classnames";
-import { WithStyles, Theme, withStyles, Toolbar, Typography, Tooltip, IconButton } from "../../../../node_modules/@material-ui/core";
+import { WithStyles, Theme, withStyles, Toolbar, Typography, IconButton } from "../../../../node_modules/@material-ui/core";
 import { lighten } from "@material-ui/core/styles/colorManipulator";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -37,7 +37,7 @@ const styles: any = (theme: Theme) => ({
     },
     title: {
         flex: "0 0 auto",
-    },
+    }
 });
 
 const ToolBarTable: React.StatelessComponent<PropsWithStyles> = ({ numSelected, headTitle, openFormSelected, deleteElements, classes }): JSX.Element => {
@@ -66,16 +66,12 @@ const ToolBarTable: React.StatelessComponent<PropsWithStyles> = ({ numSelected, 
             <div className={classes.actions}>
                 {numSelected > 0 ? (
                     <React.Fragment>
-                        <Tooltip title="Actualizar">
                             <IconButton aria-label="Edit" onClick={() => openFormSelected()} disabled={!(numSelected === 1)}>
                                 <EditIcon />
                             </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Eliminar">
                             <IconButton aria-label="Delete" onClick={() => deleteElements()}>
                                 <DeleteIcon />
                             </IconButton>
-                        </Tooltip>
                     </React.Fragment>
                 ) : null}
             </div>

@@ -49,11 +49,10 @@ function updatedCountries(countries: Array<ICountry>): UpdatedCountryAction {
     };
 }
 
-function initCountryForm(country: ICountry, open?:boolean): InitFormAction {
+function initCountryForm(country: ICountry): InitFormAction {
     return {
         type: ActionsTypesEnum.INIT_FORM,
-        country,
-        open
+        country
     };
 }
 

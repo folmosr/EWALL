@@ -1,6 +1,5 @@
 import ICountry from "../interfaces/country.interfaces";
 import ISponsor, { ISponsorForm } from "../interfaces/sponsor.interfaces";
-import { FormReducer } from "redux-form";
 
 namespace Store {
 
@@ -25,9 +24,9 @@ namespace Store {
                 _id?: string,
                 name: string,
                 code: string,
-                currency: string
-            },
-            open: boolean
+                currency: string,
+                open?: boolean
+            }
         };
 
         export type SponsorForm = {
@@ -37,14 +36,14 @@ namespace Store {
                 url: string,
                 imageBase64Encode: string
             },
-            loading?:boolean,
+            loading?: boolean,
             open: boolean
         };
 
         export type All = {
             CountryComponent: CountryComponentType,
             SponsorComponent: SponsorComponentType,
-            CountryData: { country: ICountry, open: boolean },
+            CountryData: { country: ICountry },
             SponsorData: { sponsor: ISponsorForm, open: boolean }
         };
 
@@ -54,7 +53,8 @@ namespace Store {
         name: null,
         code: null,
         currency: null,
-        _id: null
+        _id: null,
+        open: false
     };
 
     export const sponsorForm: ISponsorForm = {

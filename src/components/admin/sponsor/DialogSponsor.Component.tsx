@@ -99,7 +99,7 @@ class DialogSponsor extends React.Component<globalProps, {}> {
     previewThumbnail = (e: React.FormEvent<HTMLInputElement>) => {
         let file: Blob = e.currentTarget.files[0];
         let reader: FileReader = new FileReader();
-        ((props: globalProps, input:HTMLInputElement) =>
+        ((props: globalProps, input: HTMLInputElement) =>
             reader.addEventListener("loadend", function (): void {
                 props.change("imageBase64Encode", this.result.toString());
                 input.value = null;
@@ -115,6 +115,36 @@ class DialogSponsor extends React.Component<globalProps, {}> {
 
     render(): JSX.Element {
         let avatarJSX: JSX.Element = (this.props.logoFormValue == null) ? <Avatar className={this.props.classes.avatar}>A</Avatar> : <Avatar className={this.props.classes.avatar} src={this.props.logoFormValue} />
+        let components: JSX.Element = (this.props.loading) ? (<div style={{ display: "flex", justifyContent: "center" }}>
+            <CircularProgress className={this.props.classes.progress} thickness={7} /></div>) :
+            <React.Fragment>
+                <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
+                    Creación/Administración de datos.
+</DialogContentText>
+                <div className={this.props.classes.row}>
+                    {avatarJSX}
+                </div>
+                <Field
+                    className={this.props.classes.textField}
+                    name="name"
+                    label="Nombre"
+                    component={renderTextField}
+                    validate={[required, justLetter]} />
+                <Field
+                    className={this.props.classes.textField}
+                    name="url"
+                    label="Url"
+                    component={renderTextField}
+                    validate={[required, isValidURL]} />
+                <label htmlFor="flat-button-file">
+                    <Button color="secondary"
+                        component="span"
+                        className={this.props.classes.button}>
+                        <CloudUploadIcon className={this.props.classes.extendedIcon} />
+                        Avatar
+</Button>
+                </label>
+            </React.Fragment>
         return (<div>
             <Dialog
                 disableBackdropClick
@@ -125,32 +155,7 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                 <DialogTitle id="form-dialog-title">Registro</DialogTitle>
                 <form onSubmit={this.props.handleSubmit}>
                     <DialogContent>
-                        <DialogContentText className={this.props.classes.dialogContentText} id="alert-dialog-description">
-                            Creación/Administración de datos.
-                    </DialogContentText>
-                        <div className={this.props.classes.row}>
-                            {avatarJSX}
-                        </div>
-                        <Field
-                            className={this.props.classes.textField}
-                            name="name"
-                            label="Nombre"
-                            component={renderTextField}
-                            validate={[required, justLetter]} />
-                        <Field
-                            className={this.props.classes.textField}
-                            name="url"
-                            label="Url"
-                            component={renderTextField}
-                            validate={[required,isValidURL]} />
-                        <label htmlFor="flat-button-file">
-                            <Button color="secondary"
-                                component="span"
-                                className={this.props.classes.button}>
-                                <CloudUploadIcon className={this.props.classes.extendedIcon} />
-                                Avatar
-                        </Button>
-                        </label>
+                        {components}
                     </DialogContent>
                     <DialogActions>
                         <Button type="button" onClick={() => resetAndCloseForm("sponsorForm", this.props.dispatch)}

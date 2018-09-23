@@ -1,6 +1,5 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
-import { Observable } from "rxjs";
 import ISponsor, { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
 import { TableComponent } from "../../generics/Table/Table.Component";
 import IHeadColumn from "../../../interfaces/headColumn.interface";
@@ -133,7 +132,7 @@ class SponsorList extends React.Component<PropsTable, State> implements ITable {
                     data={this.props.data}
                     keys={this.props.data.map(item => item._id)}
                     selected={this.props.elements}
-                    tableTitle={"Sponsor"}
+                    tableTitle={"Patrocinadores"}
                     columns={columns}
                     openFormSelected={this.openFormSelected}
                     deleteElements={this.deleteElements}

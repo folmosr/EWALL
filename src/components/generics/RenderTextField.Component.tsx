@@ -6,10 +6,11 @@ import {
 } from "redux-form";
 
 type InputTexField = {
-    className: string
+    className: string;
+    disabled: boolean
 };
 const renderTextField: React.StatelessComponent<WrappedFieldProps & InputTexField> = (props: WrappedFieldProps & InputTexField) => {
-    const { className, input, label, meta: { touched, error, asyncValidating, dirty } } = props;
+    const { className, input, label, disabled, meta: { touched, error, asyncValidating, dirty } } = props;
     return (
         <React.Fragment><TextField
             placeholder={label}
@@ -17,6 +18,7 @@ const renderTextField: React.StatelessComponent<WrappedFieldProps & InputTexFiel
             {...input}
             error={(error && touched)}
             className={className}
+            disabled={disabled}
         />
             {(error && touched) && <FormHelperText error={error} className={className}>{error}</FormHelperText>}
         </React.Fragment>

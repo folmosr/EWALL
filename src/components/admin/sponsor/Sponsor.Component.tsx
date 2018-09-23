@@ -113,7 +113,6 @@ class Sponsors extends React.Component<SponsorProps, State> {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
             <SponsorList data={this.props.sponsors} initSponsorForm={this.props.initSponsorForm} setSelected={this.setSelected} deleteSelected={this.deleteSponsors} elements={this.state.selected} />;
-        let iconButton: JSX.Element = (this.state.selected.length === 1) ? <SyncIcon /> : <AddIcon />;
         return (
             <React.Fragment>
                 <Paper className={this.props.classes.root} elevation={4}>
@@ -122,7 +121,7 @@ class Sponsors extends React.Component<SponsorProps, State> {
                         className={this.props.classes.fab}
                         onClick={this.handleClickOpen}
                     >
-                        {iconButton}
+                        <AddIcon />
                     </Button>
                 </Paper>
                 {ReactDOM.createPortal(<DialogSponsor

@@ -5,7 +5,9 @@ import {
     InjectedFormProps,
     DecoratedComponentClass,
     WrappedFieldProps,
-    reset
+    reset,
+    formValueSelector,
+    AsyncValidateCallback
 } from "redux-form";
 import { connect } from "react-redux";
 import Store from "../../../store/store.namespace";
@@ -26,14 +28,16 @@ import { Dispatch } from "redux";
 import { InitFormAction } from "../../../types/countriesActionsTypes";
 
 type DispatchProps = {
-    onSubmit: (value: ICountry) => void
-    dispatch: Dispatch<InitFormAction>
+    onSubmit: (value: ICountry) => void;
+    dispatch: Dispatch<InitFormAction>;
+    initForm: (country: ICountry) => void
 };
 type Props = {
     loading: boolean;
     openDialog: boolean;
     children?: React.ReactNode;
     initialValues: ICountry;
+    idCountryFormValue: string;
 } & DispatchProps;
 type PropsWithStyle = Props & WithStyles<"progress" | "textField" | "dialogContentText">;
 const styles: any = (theme: Theme) => ({
@@ -60,10 +64,6 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         super(props);
     }
 
-    onComponentWillMount(): void {
-        this.props.reset();
-    }
-
     render(): JSX.Element {
         let components: JSX.Element = (this.props.loading) ? (<div style={{ display: "flex", justifyContent: "center" }}>
             <CircularProgress className={this.props.classes.progress} thickness={7} /></div>) :
@@ -82,6 +82,7 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                     name="code"
                     label="Código ISO"
                     component={renderTextField}
+                    disabled={!(this.props.idCountryFormValue === null || this.props.idCountryFormValue === undefined)}
                     validate={[required, minLengthOfISO]} />
                 <Field
                     className={this.props.classes.textField}
@@ -96,7 +97,6 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                     disableBackdropClick
                     disableEscapeKeyDown
                     open={this.props.openDialog}
-                    onClose={() => resetAndCloseForm("countryForm", this.props.dispatch)}
                     aria-labelledby="form-dialog-title"
                 >
                     <DialogTitle id="form-dialog-title">Registro</DialogTitle>
@@ -105,7 +105,7 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                             {components}
                         </DialogContent>
                         <DialogActions>
-                            <Button type="button" onClick={() => resetAndCloseForm("countryForm", this.props.dispatch)}
+                            <Button type="button" onClick={() => { this.props.initForm({ name:undefined, currency:undefined, code:undefined, open:false}); }}
                                 color="secondary">Cancelar</Button>
                             <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                         </DialogActions>
@@ -115,31 +115,32 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
         );
     }
 }
-const resetAndCloseForm: (v: string, dispatch: Dispatch<any>) => any = (form: string, dispatch: Dispatch<any>): any => {
-    dispatch(reset(form));
-    dispatch(initCountryForm({
-        _id: undefined,
-        name: undefined,
-        code: undefined,
-        currency: undefined
-    }, false));
-};
 
-const afterSubmit: any = (result: any, dispatch: any) => {
-    resetAndCloseForm("countryForm", dispatch);
-};
-
+const selector = formValueSelector("countryForm")
 let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
         form: "countryForm",
         asyncValidate: asyncValidateCountry,
         asyncBlurFields: ["code"],
         enableReinitialize: true,
-        onSubmitSuccess: afterSubmit
+        shouldAsyncValidate: (param: AsyncValidateCallback<FormData> = {
+            trigger: "blur",
+            initialized: false,
+            pristine: false,
+            syncValidationPasses: true
+        }) => {
+            switch (param.trigger) {
+                case "blur":
+                    return true
+                default:
+                    return false
+            }
+        }
     })(DialogCountries);
 export default connect(
     (state: Store.Types.All) => ({
         initialValues: state.CountryData.country,
-        openDialog: state.CountryData.open
+        idCountryFormValue: selector(state, "_id"),
+        openDialog: selector(state, "open")
     }),
 )(withStyles(styles)<Props>(DialogCountriesForm));
