@@ -2,7 +2,6 @@ import {
     LoadCountryAction,
     FulfilledCountryAction,
     AddCountryAction,
-    UpdatedCountryAction,
     InitFormAction,
     DeleteCountryAction
 } from "../types/countriesActionsTypes";
@@ -40,15 +39,6 @@ function deleteCountry(country: ICountry): DeleteCountryAction {
     };
 }
 
-function updatedCountries(countries: Array<ICountry>): UpdatedCountryAction {
-    return {
-        type: ActionsTypesEnum.UPDATED_COUNTRIES,
-        countries,
-        updated: true,
-        loading: false
-    };
-}
-
 function initCountryForm(country: ICountry): InitFormAction {
     return {
         type: ActionsTypesEnum.INIT_FORM,
@@ -60,7 +50,6 @@ export {
     loadCountries,
     fullfilledCountries,
     addCountry,
-    updatedCountries,
     initCountryForm,
     deleteCountry
 };

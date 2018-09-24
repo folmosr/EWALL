@@ -7,9 +7,7 @@ namespace Store {
 
         export type CountryComponentType = {
             loading: boolean,
-            country: ICountry,
             countries: Array<ICountry>,
-            updated: boolean,
             error?: any
         };
 
@@ -20,6 +18,7 @@ namespace Store {
         };
 
         export type CountryForm = {
+            loading:boolean;
             country: {
                 _id?: string,
                 name: string,
@@ -84,8 +83,6 @@ namespace Store {
 
     export const CountryComponent: Store.Types.CountryComponentType = {
         loading: true,
-        updated: false,
-        country,
         countries
     };
 

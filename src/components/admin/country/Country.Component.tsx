@@ -22,7 +22,17 @@ import DialogCountries from "./DialogCountry.Component";
 import ICountry from "../../../interfaces/country.interfaces";
 import ConfirmDialog from "../../generics/confirmationDialog.Component";
 
-type State = { selected: ICountry; openConfirm: boolean };
+const initialState = {
+    selected: {
+        _id: "",
+        name: "",
+        code: "",
+        currency: ""
+    },
+    openConfirm: false
+};
+
+type State = Readonly<typeof initialState>;
 
 type DispatchProps = {
     loadCountries: typeof loadCountries;
@@ -65,15 +75,7 @@ const styles: any = (theme: Theme) => ({
 
 class Countries extends React.Component<CountryProps, State> {
 
-    state: State = {
-        selected: {
-            _id: null,
-            name: null,
-            code: null,
-            currency: null
-        },
-        openConfirm: false
-    };
+    readonly state: State = initialState;
 
     constructor(props: CountryProps) {
         super(props);
@@ -83,21 +85,6 @@ class Countries extends React.Component<CountryProps, State> {
         if (this.props.loadCountries) {
             this.props.loadCountries();
         }
-    }
-
-    static getDerivedStateFromProps(nextProps: CountryProps, prevState: State): State {
-        if (nextProps.updated) {
-            return {
-                selected: {
-                    _id: null,
-                    name: null,
-                    code: null,
-                    currency: null
-                },
-                openConfirm: false
-            };
-        }
-        return null;
     }
 
     handleClickOpen = () => {
@@ -111,14 +98,8 @@ class Countries extends React.Component<CountryProps, State> {
     }
 
     submit = (value: ICountry): void => {
+        value.open = false;
         this.props.addCountry(value);
-        this.props.initCountryForm({
-            _id: null,
-            name: null,
-            code: null,
-            currency: null,
-            open: false
-        });
     }
 
     onSelect = (selected: ICountry): any => {
@@ -126,8 +107,16 @@ class Countries extends React.Component<CountryProps, State> {
         this.props.initCountryForm(selected);
     }
 
-    onDelete = (selected: ICountry): any => {
-        this.setState({ selected, openConfirm: true });
+    onDelete = (country: ICountry): any => {
+
+        this.setState({
+            selected: {
+                _id: country._id,
+                name: country.name,
+                currency: country.currency,
+                code: country.code
+            }, openConfirm: true
+        });
     }
 
     onClickDeleteOk = (): void => {

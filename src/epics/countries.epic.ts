@@ -3,7 +3,7 @@ import "rxjs/operators/switchMap";
 import { ActionsObservable } from "redux-observable";
 import { Action } from "redux";
 
-import { fullfilledCountries, updatedCountries } from "../actions/countries.actions";
+import { fullfilledCountries } from "../actions/countries.actions";
 import { LoadCountryAction, AddCountryAction, DeleteCountryAction } from "../types/countriesActionsTypes";
 import ActionsTypesEnum from "../enums/countriesActionsTypes.enum";
 
@@ -47,7 +47,7 @@ function addCountryEpic(actions$: ActionsObservable<Action>): Observable<Action>
         })
         .switchMap(() => {
             return Observable.ajax(requestSettings)
-                .map(q => updatedCountries(q.response));
+                .map(q => fullfilledCountries(q.response));
         });
 }
 
@@ -60,7 +60,7 @@ function deleteCountryEpic(actions$: ActionsObservable<Action>): Observable<Acti
         })
         .switchMap(() => {
             return Observable.ajax(requestSettings)
-                .map(q => updatedCountries(q.response));
+                .map(q => fullfilledCountries(q.response));
         });
 }
 export { loadCountriesEpic, addCountryEpic, deleteCountryEpic };

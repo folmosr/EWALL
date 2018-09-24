@@ -21,14 +21,6 @@ export type AddCountryAction = {
     loading: boolean
 };
 
-export type UpdatedCountryAction = {
-    type: ActionsTypesEnum.UPDATED_COUNTRIES,
-    countries: Array<ICountry>,
-    updated: boolean
-    error?: any,
-    loading: boolean
-};
-
 export type InitFormAction = {
     type: ActionsTypesEnum.INIT_FORM,
     country: ICountry
