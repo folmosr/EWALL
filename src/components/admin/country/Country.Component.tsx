@@ -9,17 +9,16 @@ import Typography from "@material-ui/core/Typography";
 import blue from "@material-ui/core/colors/blue";
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-
-import Store from "../../../store/store.namespace";
+import Store from "../../../store/Store.namespace";
 import {
     loadCountries,
     addCountry,
     initCountryForm,
     deleteCountry
-} from "../../../actions/countries.actions";
+} from "../../../actions/Countries.actions";
 import CountryList from "./CountryList.Component";
 import DialogCountries from "./DialogCountry.Component";
-import ICountry from "../../../interfaces/country.interfaces";
+import ICountry from "../../../interfaces/Country.interfaces";
 import ConfirmDialog from "../../generics/confirmationDialog.Component";
 
 const initialState = {

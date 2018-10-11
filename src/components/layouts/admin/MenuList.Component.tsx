@@ -43,7 +43,7 @@ const MenuListComponent: React.SFC<any> = (props: any) => {
           <ListItemIcon>
             <ViewWeek />
           </ListItemIcon>
-          <ListItemText primary={<Link to="/categories" className={classes.a} > Categorías </Link>} />
+          <ListItemText primary={<Link to="/clasifications" className={classes.a} > Clasificaciones </Link>} />
         </ListItem>
         <ListItem button>
           <ListItemIcon>

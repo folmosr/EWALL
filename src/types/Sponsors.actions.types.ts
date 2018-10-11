@@ -1,5 +1,5 @@
-import ISponsor, { ISponsorForm } from "../interfaces/sponsor.interfaces";
-import SponsorActionTypeEnum from "../enums/sponsorsActionstypes.enum";
+import ISponsor, { ISponsorForm } from "../interfaces/Sponsor.interfaces";
+import SponsorActionTypeEnum from "../enums/Sponsors.actions.types.enum";
 
 export type LoadSponsorAction = {
     type: SponsorActionTypeEnum.LOAD_SPONSORS,
@@ -16,8 +16,8 @@ export type FullfilledSponsorAction = {
 
 export type InitFormAction = {
     type: SponsorActionTypeEnum.INIT_FORM,
-    sponsor: ISponsorForm,
-    open: boolean
+    sponsor: ISponsorForm
+    loading: boolean
 };
 
 export type AddSponsorAction = {

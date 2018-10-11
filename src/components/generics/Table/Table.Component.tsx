@@ -8,7 +8,7 @@ import {
 } from "../../../../node_modules/@material-ui/core";
 import HeadTable from "./HeadTable.Component";
 import ToolBarTable from "./Toolbar.Component";
-import { getSorting } from "../../../helpers/util";
+import { getSorting } from "../../../helpers/Util";
 
 type State = {
     order: "asc" | "desc",

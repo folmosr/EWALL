@@ -1,9 +1,16 @@
-import ICountry from "../interfaces/country.interfaces";
-import ISponsor, { ISponsorForm } from "../interfaces/sponsor.interfaces";
+import ICountry from "../interfaces/Country.interfaces";
+import IClasification from "../interfaces/Clasification.interface";
+import ISponsor, { ISponsorForm } from "../interfaces/Sponsor.interfaces";
 
 namespace Store {
 
     export namespace Types {
+
+        export type ClasificationComponentType = {
+            loading: boolean,
+            clasifications: Array<IClasification>,
+            error?: any
+        };
 
         export type CountryComponentType = {
             loading: boolean,
@@ -18,7 +25,7 @@ namespace Store {
         };
 
         export type CountryForm = {
-            loading:boolean;
+            loading: boolean;
             country: {
                 _id?: string,
                 name: string,
@@ -33,17 +40,18 @@ namespace Store {
                 _id?: string,
                 name: string,
                 url: string,
-                imageBase64Encode: string
+                imageBase64Encode: string,
+                open: boolean
             },
-            loading?: boolean,
-            open: boolean
+            loading?: boolean
         };
 
         export type All = {
             CountryComponent: CountryComponentType,
+            ClasificationData: ClasificationComponentType,
             SponsorComponent: SponsorComponentType,
             CountryData: { country: ICountry },
-            SponsorData: { sponsor: ISponsorForm, open: boolean }
+            SponsorData: { sponsor: ISponsorForm }
         };
 
     }
@@ -60,7 +68,8 @@ namespace Store {
         name: null,
         url: null,
         imageBase64Encode: null,
-        _id: null
+        _id: null,
+        open: false
     };
 
     export const sponsor: ISponsor = {
@@ -80,6 +89,7 @@ namespace Store {
 
     const countries: Array<ICountry> = [];
     const sponsors: Array<ISponsor> = [];
+    const clasifications : Array<IClasification> = [];
 
     export const CountryComponent: Store.Types.CountryComponentType = {
         loading: true,
@@ -90,5 +100,10 @@ namespace Store {
         loading: true,
         sponsors
     };
+
+    export const ClasificationComponent:Store.Types.ClasificationComponentType = {
+        loading: true,
+        clasifications
+    }
 }
 export default Store;

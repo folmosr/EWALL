@@ -1,9 +1,9 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
-import ISponsor, { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
+import ISponsor, { ISponsorForm } from "../../../interfaces/Sponsor.interfaces";
 import { TableComponent } from "../../generics/Table/Table.Component";
-import IHeadColumn from "../../../interfaces/headColumn.interface";
-import ITable from "../../../interfaces/table.interface";
+import IHeadColumn from "../../../interfaces/HeadColumn.interface";
+import ITable from "../../../interfaces/Table.interface";
 import {
     TableRow,
     TableCell,
@@ -12,8 +12,8 @@ import {
     Avatar
 } from "../../../../node_modules/@material-ui/core";
 import ConfirmDialog from "../../generics/confirmationDialog.Component";
-import { bufferToBase64 } from "../../../helpers/util";
-import { InitFormAction } from "../../../types/sponsorsActionsTypes";
+import { bufferToBase64 } from "../../../helpers/Util";
+import { InitFormAction } from "../../../types/Sponsors.actions.types";
 import _ = require("lodash");
 
 const initialState = { openConfirm: false, dblClick: false }
@@ -89,9 +89,10 @@ class SponsorList extends React.Component<PropsTable, State> implements ITable {
             name: item.name,
             url: item.url,
             _id: item._id,
-            imageBase64Encode: `data:image/jpeg;base64,${bufferToBase64(item.logo.data.data)}`
+            imageBase64Encode: `data:image/jpeg;base64,${bufferToBase64(item.logo.data.data)}`,
+            open: true
         }
-        this.props.initSponsorForm(sponsor, true);
+        this.props.initSponsorForm(sponsor);
     }
 
     openFormSelected = (): void => {
@@ -101,9 +102,10 @@ class SponsorList extends React.Component<PropsTable, State> implements ITable {
             name: item.name,
             url: item.url,
             _id: item._id,
-            imageBase64Encode: `data:image/jpeg;base64,${bufferToBase64(item.logo.data.data)}`
+            imageBase64Encode: `data:image/jpeg;base64,${bufferToBase64(item.logo.data.data)}`,
+            open: true
         }
-        this.props.initSponsorForm(sponsor, true);
+        this.props.initSponsorForm(sponsor);
     }
 
     onClickEventOnRow = (item: ISponsor): void => {

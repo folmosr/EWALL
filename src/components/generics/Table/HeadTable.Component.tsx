@@ -3,7 +3,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import Checkbox from "@material-ui/core/Checkbox";
-import IHeadColumn from "../../../interfaces/headColumn.interface";
+import IHeadColumn from "../../../interfaces/HeadColumn.interface";
 import TableSortLabel from "../../../../node_modules/@material-ui/core/TableSortLabel";
 
 type headPropTable = {

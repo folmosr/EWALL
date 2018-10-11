@@ -1,12 +1,12 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
-import Store from "../../../store/store.namespace";
+import Store from "../../../store/Store.namespace";
 import {
     loadSponsors,
     initSponsorForm,
     addSponsor,
     deleteSponsor
-} from "../../../actions/sponsors.actions";
+} from "../../../actions/Sponsors.actions";
 import { connect, Dispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -23,7 +23,7 @@ import blue from "@material-ui/core/colors/blue";
 import SponsorList from "./SponsorTable.Component";
 
 import DialogSponsor from "./dialogSponsor.Component";
-import { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
+import { ISponsorForm } from "../../../interfaces/Sponsor.interfaces";
 
 type State = {
     selected: Array<string>;
@@ -87,6 +87,7 @@ class Sponsors extends React.Component<SponsorProps, State> {
 
     submit = (value: ISponsorForm): void => {
         value.imageBase64Encode = value.imageBase64Encode.split(",").pop();
+        value.open = false;
         this.props.addSponsor(value);
     }
 
@@ -104,9 +105,9 @@ class Sponsors extends React.Component<SponsorProps, State> {
                 name: null,
                 url: null,
                 imageBase64Encode: null,
-                _id: null
-            },
-            true);
+                _id: null,
+                open: true
+            });
     }
 
     render(): JSX.Element {
@@ -127,6 +128,7 @@ class Sponsors extends React.Component<SponsorProps, State> {
                 {ReactDOM.createPortal(<DialogSponsor
                     loading={this.props.loading}
                     onSubmit={this.submit}
+                    initForm={this.props.initSponsorForm}
                 />,
                     document.getElementById("portal-container")
                 )

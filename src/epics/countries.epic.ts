@@ -3,9 +3,9 @@ import "rxjs/operators/switchMap";
 import { ActionsObservable } from "redux-observable";
 import { Action } from "redux";
 
-import { fullfilledCountries } from "../actions/countries.actions";
-import { LoadCountryAction, AddCountryAction, DeleteCountryAction } from "../types/countriesActionsTypes";
-import ActionsTypesEnum from "../enums/countriesActionsTypes.enum";
+import { fullfilledCountries } from "../actions/Countries.actions";
+import { LoadCountryAction, AddCountryAction, DeleteCountryAction } from "../types/Countries.actions.types";
+import ActionsTypesEnum from "../enums/Countries.actions.types.enum";
 
 
 const url: string = `http://localhost:3000/api/countries/`;

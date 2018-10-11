@@ -9,7 +9,7 @@ import {
     formValueSelector
 } from "redux-form";
 import { connect } from "react-redux";
-import Store from "../../../store/store.namespace";
+import Store from "../../../store/Store.namespace";
 import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import blue from "@material-ui/core/colors/blue";
@@ -22,11 +22,10 @@ import renderTextField from "../../generics/RenderTextField.Component";
 import { Avatar } from "../../../../node_modules/@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
-import { ISponsorForm } from "../../../interfaces/sponsor.interfaces";
-import { initSponsorForm } from "../../../actions/sponsors.actions";
-import { required, justLetter, isValidURL } from "../../../helpers/validations";
+import { ISponsorForm } from "../../../interfaces/Sponsor.interfaces";
+import { required, justLetter, isValidURL } from "../../../helpers/Validations";
 import { Dispatch } from "redux";
-import { InitFormAction } from "../../../types/sponsorsActionsTypes";
+import { InitFormAction } from "../../../types/Sponsors.actions.types";
 
 type DispatchProps = {
     onSubmit: (value: ISponsorForm) => void
@@ -42,6 +41,7 @@ type Props = {
     urlFormValue: string;
     idSponsorFormValue: string;
     logoFormValue: string;
+    initForm: (param: ISponsorForm) => void
 } & DispatchProps;
 
 type PropsWithStyle = Props & WithStyles<
@@ -110,9 +110,6 @@ class DialogSponsor extends React.Component<globalProps, {}> {
         }
     }
 
-    componentDidUpdate(): void {
-    }
-
     render(): JSX.Element {
         let avatarJSX: JSX.Element = (this.props.logoFormValue == null) ? <Avatar className={this.props.classes.avatar}>A</Avatar> : <Avatar className={this.props.classes.avatar} src={this.props.logoFormValue} />
         let components: JSX.Element = (this.props.loading) ? (<div style={{ display: "flex", justifyContent: "center" }}>
@@ -158,7 +155,15 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                         {components}
                     </DialogContent>
                     <DialogActions>
-                        <Button type="button" onClick={() => resetAndCloseForm("sponsorForm", this.props.dispatch)}
+                        <Button type="button" onClick={() => {
+                            this.props.initForm({
+                                name: null,
+                                url: null,
+                                imageBase64Encode: null,
+                                _id: null,
+                                open: false
+                            })
+                        }}
                             color="secondary">Cancelar</Button>
                         <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                     </DialogActions>
@@ -176,32 +181,19 @@ class DialogSponsor extends React.Component<globalProps, {}> {
     }
 }
 
-const resetAndCloseForm: (v: string, dispatch: Dispatch<any>) => any = (form: string, dispatch: Dispatch<any>): any => {
-    dispatch(reset(form));
-    dispatch(initSponsorForm({
-        _id: null,
-        name: null,
-        url: null,
-        imageBase64Encode: null
-    }, false));
-};
-const afterSubmit: any = (result: any, dispatch: any) => {
-    resetAndCloseForm("sponsorForm", dispatch);
-};
 let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
         form: "sponsorForm",
-        enableReinitialize: true,
-        onSubmitSuccess: afterSubmit
+        enableReinitialize: true
     })(DialogSponsor);
 const selector = formValueSelector("sponsorForm")
 export default connect(
     (state: Store.Types.All) => ({
         initialValues: state.SponsorData.sponsor,
-        openDialog: state.SponsorData.open,
         nameFormValue: selector(state, "name"),
         urlFormValue: selector(state, "url"),
         logoFormValue: selector(state, "imageBase64Encode"),
-        idSponsorFormValue: selector(state, "_id")
+        idSponsorFormValue: selector(state, "_id"),
+        openDialog: selector(state, "open")
     }),
 )(withStyles(styles)<Props>(DialogSponsorForm));

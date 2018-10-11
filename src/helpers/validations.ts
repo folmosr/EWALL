@@ -1,4 +1,4 @@
-import ICountry from "../interfaces/country.interfaces";
+import ICountry from "../interfaces/Country.interfaces";
 
 export const required: (value: any) => undefined | string = (value: any) => (value) ? undefined : "Este campo es requerido";
 

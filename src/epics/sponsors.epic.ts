@@ -2,14 +2,14 @@ import { Observable } from "rxjs";
 import "rxjs/operators/switchMap";
 import { ActionsObservable } from "redux-observable";
 import { Action } from "redux";
-import ActionsTypesEnum from "../enums/sponsorsActionsTypes.enum";
+import ActionsTypesEnum from "../enums/Sponsors.actions.types.enum";
 
-import { fullfilledSponsors } from "../actions/sponsors.actions";
+import { fullfilledSponsors } from "../actions/Sponsors.actions";
 import {
     LoadSponsorAction,
     AddSponsorAction,
     DeleteSponsorAction
-} from "../types/sponsorsActionsTypes";
+} from "../types/Sponsors.actions.types";
 
 const url: string = `http://localhost:3000/api/organizations/`;
 const headers: object = { 'Content-Type': 'application/json; charset=utf-8' };

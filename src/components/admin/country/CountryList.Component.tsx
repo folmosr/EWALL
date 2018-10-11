@@ -3,7 +3,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
 import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
 
-import ICountry from "../../../interfaces/country.interfaces";
+import ICountry from "../../../interfaces/Country.interfaces";
 
 type Props = {
     countries: Array<ICountry>,

@@ -4,13 +4,17 @@ import {
     loadCountriesEpic,
     addCountryEpic,
     deleteCountryEpic
-} from "./countries.epic";
+} from "./Countries.epic";
 
 import {
     loadSponsorsEpic,
     addSponsorsEpic,
     deleteSponsorsEpic
-} from "./sponsors.epic";
+} from "./Sponsors.epic";
+
+import { 
+    loadClasificationsEpic
+} from "./Clasifications.epic"
 
 export default combineEpics(
     loadCountriesEpic,
@@ -18,5 +22,6 @@ export default combineEpics(
     deleteCountryEpic,
     loadSponsorsEpic,
     addSponsorsEpic,
-    deleteSponsorsEpic
+    deleteSponsorsEpic,
+    loadClasificationsEpic
 );

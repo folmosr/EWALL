@@ -5,12 +5,11 @@ import {
     InjectedFormProps,
     DecoratedComponentClass,
     WrappedFieldProps,
-    reset,
     formValueSelector,
     AsyncValidateCallback
 } from "redux-form";
 import { connect } from "react-redux";
-import Store from "../../../store/store.namespace";
+import Store from "../../../store/Store.namespace";
 import { Theme, withStyles, WithStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import blue from "@material-ui/core/colors/blue";
@@ -20,11 +19,11 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import ICountry from "../../../interfaces/country.interfaces";
+import ICountry from "../../../interfaces/Country.interfaces";
 import renderTextField from "../../generics/RenderTextField.Component";
-import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/validations";
+import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/Validations";
 import { Dispatch } from "redux";
-import { InitFormAction } from "../../../types/countriesActionsTypes";
+import { InitFormAction } from "../../../types/Countries.actions.types";
 
 type DispatchProps = {
     onSubmit: (value: ICountry) => void;

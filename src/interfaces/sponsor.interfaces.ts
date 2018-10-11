@@ -12,4 +12,5 @@ export interface ISponsorForm {
     url: string;
     imageBase64Encode: string;
     create_at?: Date;
+    open:boolean
 }

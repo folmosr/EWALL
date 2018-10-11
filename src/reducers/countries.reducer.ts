@@ -1,12 +1,12 @@
-import Store from "../store/store.namespace";
-import ActionsTypesEnum from "../enums/countriesActionsTypes.enum";
+import Store from "../store/Store.namespace";
+import ActionsTypesEnum from "../enums/Countries.actions.types.enum";
 import {
     LoadCountryAction,
     FulfilledCountryAction,
     AddCountryAction,
     InitFormAction,
     DeleteCountryAction
-} from "../types/countriesActionsTypes";
+} from "../types/Countries.actions.types";
 
 type actions = (
     InitFormAction

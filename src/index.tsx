@@ -2,15 +2,16 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider, Store as ReduxStore } from "react-redux";
-import Store from "./store/store.namespace";
+import Store from "./store/Store.namespace";
 import App from "./components/App.Component";
-import configureStore from "./store/configStore";
+import configureStore from "./store/ConfigStore";
 
 const initialState: Store.Types.All = {
     CountryComponent: Store.CountryComponent,
     SponsorComponent: Store.SponsorComponent,
+    ClasificationData:Store.ClasificationComponent,
     CountryData: { country: Store.country },
-    SponsorData: { sponsor: Store.sponsorForm, open: false }
+    SponsorData: { sponsor: Store.sponsorForm }
 };
 
 const store: ReduxStore<Store.Types.All> = configureStore(initialState);

@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core";
 
 import HomeComponent from "../../admin/Home.Component";
 import CountryComponent from "../../admin/country/Country.Component";
+import ClasificationComponent from "../../admin/Clasification/Clasification.Component"
 import SponsorComponent from "../../admin/sponsor/Sponsor.Component";
 
 const styles: any = (theme: any) => ({
@@ -16,13 +17,14 @@ const styles: any = (theme: any) => ({
     toolbar: theme.mixins.toolbar
 });
 
-const BodyComponent:React.SFC<any> = (props: any): JSX.Element => {
+const BodyComponent: React.SFC<any> = (props: any): JSX.Element => {
     const { classes } = props;
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
             <Switch>
                 <Route exact path="/" component={HomeComponent} />
+                <Route path="/clasifications" component={ClasificationComponent} />
                 <Route path="/countries" component={CountryComponent} />
                 <Route path="/sponsors" component={SponsorComponent} />
             </Switch>
