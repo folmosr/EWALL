@@ -3,7 +3,7 @@ import { reducer as formReducer } from "redux-form";
 import Store from "../store/Store.namespace";
 import { countriesReducer, countryFormReducer } from "./Countries.reducer";
 import { sponsorReducer, sponsorFormReducer } from "./Sponsors.reducer";
-import { clasificationReducer } from "./Clasifications.reducer";
+import { clasificationReducer, clasificationFormReducer } from "./Clasifications.reducer";
 
 const rootReducer: Reducer<Store.Types.All> = combineReducers({
     CountryComponent: countriesReducer,
@@ -11,6 +11,7 @@ const rootReducer: Reducer<Store.Types.All> = combineReducers({
     CountryData: countryFormReducer,
     SponsorData: sponsorFormReducer,
     ClasificationData: clasificationReducer,
+    ClasificationFormData: clasificationFormReducer,
     form: formReducer
 });
 

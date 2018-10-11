@@ -1,5 +1,5 @@
 import ICountry from "../interfaces/Country.interfaces";
-import IClasification from "../interfaces/Clasification.interface";
+import IClasification, { IClasificationForm } from "../interfaces/Clasification.interface";
 import ISponsor, { ISponsorForm } from "../interfaces/Sponsor.interfaces";
 
 namespace Store {
@@ -46,11 +46,22 @@ namespace Store {
             loading?: boolean
         };
 
+        export type ClasificationForm = {
+            clasification: {
+                _id?: string,
+                name: string,
+                imageBase64Encode: string,
+                open: boolean
+            },
+            loading?: boolean
+        };
+
         export type All = {
             CountryComponent: CountryComponentType,
             ClasificationData: ClasificationComponentType,
             SponsorComponent: SponsorComponentType,
             CountryData: { country: ICountry },
+            ClasificationFormData: { clasification: IClasificationForm },
             SponsorData: { sponsor: ISponsorForm }
         };
 
@@ -67,6 +78,13 @@ namespace Store {
     export const sponsorForm: ISponsorForm = {
         name: null,
         url: null,
+        imageBase64Encode: null,
+        _id: null,
+        open: false
+    };
+
+    export const clasificationForm: IClasificationForm = {
+        name: null,
         imageBase64Encode: null,
         _id: null,
         open: false
@@ -89,7 +107,7 @@ namespace Store {
 
     const countries: Array<ICountry> = [];
     const sponsors: Array<ISponsor> = [];
-    const clasifications : Array<IClasification> = [];
+    const clasifications: Array<IClasification> = [];
 
     export const CountryComponent: Store.Types.CountryComponentType = {
         loading: true,
@@ -101,7 +119,7 @@ namespace Store {
         sponsors
     };
 
-    export const ClasificationComponent:Store.Types.ClasificationComponentType = {
+    export const ClasificationComponent: Store.Types.ClasificationComponentType = {
         loading: true,
         clasifications
     }

@@ -11,20 +11,26 @@ import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import Store from "../../../store/Store.namespace";
 import {
-    loadClasifications
+    loadClasifications,
+    initClasificationForm,
+    addClasification
 } from "../../../actions/Clasifications.actions";
-import IClasification from "../../../interfaces/Clasification.interface";
+import IClasification, { IClasificationForm } from "../../../interfaces/Clasification.interface";
 import ClasificationList from "./ClasificationList.Component"
-
+import DialogClasification from "./DialogClasification.Component"
 
 type DispatchProps = {
     loadClasifications: typeof loadClasifications;
+    initClasificationForm: typeof initClasificationForm;
+    addClasification: typeof addClasification
 };
 
 type ClasificationProps = Store.Types.ClasificationComponentType & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab">;
 
 const actions: DispatchProps = {
-    loadClasifications
+    loadClasifications,
+    initClasificationForm,
+    addClasification
 };
 
 const styles: any = (theme: Theme) => ({
@@ -62,6 +68,21 @@ class Clasification extends React.Component<ClasificationProps, {}> {
         }
     }
 
+    handleClickOpen = () => {
+        this.props.initClasificationForm({
+            _id: null,
+            name: null,
+            imageBase64Encode: null,
+            open: true
+        });
+    }
+
+    submit = (value: IClasificationForm) => {
+        value.imageBase64Encode = value.imageBase64Encode.split(",").pop();
+        value.open = false;
+        this.props.addClasification(value);
+    }
+
     onSelect = (clasification: IClasification): void => {
         console.log(clasification);
     }
@@ -86,10 +107,20 @@ class Clasification extends React.Component<ClasificationProps, {}> {
                 <Paper className={this.props.classes.root} elevation={4}>
                     {innerComponent}
                     <Button variant="fab" mini color="secondary" aria-label="add"
-                        className={this.props.classes.fab}>
+                        className={this.props.classes.fab}
+                        onClick={() => this.handleClickOpen()}
+                    >
                         <AddIcon />
                     </Button>
                 </Paper>
+                {ReactDOM.createPortal(<DialogClasification
+                    loading={this.props.loading}
+                    onSubmit={this.submit}
+                    initForm={this.props.initClasificationForm}
+                />,
+                    document.getElementById("portal-container")
+                )
+                }
             </React.Fragment>
         );
     }

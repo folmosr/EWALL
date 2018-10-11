@@ -13,7 +13,8 @@ import {
 } from "./Sponsors.epic";
 
 import { 
-    loadClasificationsEpic
+    loadClasificationsEpic,
+    addClasificationEpic
 } from "./Clasifications.epic"
 
 export default combineEpics(
@@ -23,5 +24,6 @@ export default combineEpics(
     loadSponsorsEpic,
     addSponsorsEpic,
     deleteSponsorsEpic,
-    loadClasificationsEpic
+    loadClasificationsEpic,
+    addClasificationEpic
 );

@@ -1,4 +1,6 @@
 import * as React from "React";
+import { connect } from "react-redux";
+import Store from "../../../store/Store.namespace";
 import {
     Field,
     reduxForm,
@@ -7,8 +9,6 @@ import {
     WrappedFieldProps,
     formValueSelector
 } from "redux-form";
-import { connect } from "react-redux";
-import Store from "../../../store/Store.namespace";
 import {
     Theme,
     withStyles,
@@ -25,21 +25,20 @@ import renderTextField from "../../generics/RenderTextField.Component";
 import { Avatar } from "../../../../node_modules/@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
-import { ISponsorForm } from "../../../interfaces/Sponsor.interfaces";
-import { required, justLetter, isValidURL } from "../../../helpers/Validations";
-import { InitFormAction } from "../../../types/Sponsors.actions.types";
+import { required, justLetter } from "../../../helpers/Validations";
+import { Dispatch } from "redux";
+import { IClasificationForm } from "../../../interfaces/Clasification.interface"
 
 type Props = {
     loading: boolean;
     openDialog: boolean;
     children?: React.ReactNode;
-    initialValues: ISponsorForm;
+    initialValues: IClasificationForm;
+    idClasificationFormValue: string;
     nameFormValue: string;
-    urlFormValue: string;
-    idSponsorFormValue: string;
     logoFormValue: string;
-    initForm: (param: ISponsorForm) => void;
-    onSubmit: (value: ISponsorForm) => void
+    initForm: (param: IClasificationForm) => void
+    onSubmit: (value: IClasificationForm) => void
 };
 
 type PropsWithStyle = Props & WithStyles<
@@ -88,7 +87,7 @@ const styles: any = (theme: Theme) => ({
 
 type globalProps = PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>;
 
-class DialogSponsor extends React.Component<globalProps, {}> {
+class DialogClasification extends React.Component<globalProps, {}> {
 
     constructor(props: globalProps) {
         super(props);
@@ -125,12 +124,6 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                     label="Nombre"
                     component={renderTextField}
                     validate={[required, justLetter]} />
-                <Field
-                    className={this.props.classes.textField}
-                    name="url"
-                    label="Url"
-                    component={renderTextField}
-                    validate={[required, isValidURL]} />
                 <label htmlFor="flat-button-file">
                     <Button color="secondary"
                         component="span"
@@ -156,7 +149,6 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                         <Button type="button" onClick={() => {
                             this.props.initForm({
                                 name: null,
-                                url: null,
                                 imageBase64Encode: null,
                                 _id: null,
                                 open: false
@@ -179,19 +171,18 @@ class DialogSponsor extends React.Component<globalProps, {}> {
     }
 }
 
-let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle> =
+let DialogClasificationForm: DecoratedComponentClass<{}, PropsWithStyle> =
     reduxForm<{}, PropsWithStyle>({
-        form: "sponsorForm",
+        form: "clasificationForm",
         enableReinitialize: true
-    })(DialogSponsor);
-const selector = formValueSelector("sponsorForm")
+    })(DialogClasification);
+const selector = formValueSelector("clasificationForm")
 export default connect(
     (state: Store.Types.All) => ({
-        initialValues: state.SponsorData.sponsor,
+        initialValues: state.ClasificationFormData.clasification,
         nameFormValue: selector(state, "name"),
-        urlFormValue: selector(state, "url"),
         logoFormValue: selector(state, "imageBase64Encode"),
-        idSponsorFormValue: selector(state, "_id"),
+        idClasificationFormValue: selector(state, "_id"),
         openDialog: selector(state, "open")
     }),
-)(withStyles(styles)<Props>(DialogSponsorForm));
+)(withStyles(styles)<Props>(DialogClasificationForm));

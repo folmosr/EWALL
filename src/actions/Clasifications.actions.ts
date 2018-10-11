@@ -1,22 +1,39 @@
 import  {
     LoadCalsificationsAction,
-    FulfilledCalsificationsAction
+    FulfilledCalsificationsAction,
+    InitFormAction,
+    AddClasificationAction
 } 
 from "../types/Clasifications.actions.type";
-import CalsificationsActionTypeEnum  from "../enums/Clasifications.actions.types.enum";
-import IClasification from "../interfaces/Clasification.interface";
+import ActionsTypesEnum  from "../enums/Clasifications.actions.types.enum";
+import IClasification, { IClasificationForm } from "../interfaces/Clasification.interface";
 
 export function loadClasifications(): LoadCalsificationsAction {
     return {
-        type: CalsificationsActionTypeEnum.LOAD_CLASIFICATIONS,
+        type: ActionsTypesEnum.LOAD_CLASIFICATIONS,
         loading: true
     };
 }
 
 export function fullfilledClasifications(clasifications:Array<IClasification>): FulfilledCalsificationsAction {
     return {
-        type: CalsificationsActionTypeEnum.FULFILLED_CLASIFICATIONS,
+        type: ActionsTypesEnum.FULFILLED_CLASIFICATIONS,
         clasifications,
         loading: false
+    };
+}
+
+export function initClasificationForm(clasification: IClasificationForm): InitFormAction {
+    return {
+        type: ActionsTypesEnum.INIT_FORM,
+        clasification
+    };
+}
+
+export function addClasification(clasification: IClasificationForm): AddClasificationAction {
+    return {
+        type: ActionsTypesEnum.ADD_CLASIFICATION,
+        clasification,
+        loading: true
     };
 }

@@ -22,22 +22,19 @@ import Button from "@material-ui/core/Button";
 import ICountry from "../../../interfaces/Country.interfaces";
 import renderTextField from "../../generics/RenderTextField.Component";
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/Validations";
-import { Dispatch } from "redux";
-import { InitFormAction } from "../../../types/Countries.actions.types";
 
-type DispatchProps = {
-    onSubmit: (value: ICountry) => void;
-    dispatch: Dispatch<InitFormAction>;
-    initForm: (country: ICountry) => void
-};
 type Props = {
     loading: boolean;
     openDialog: boolean;
     children?: React.ReactNode;
     initialValues: ICountry;
     idCountryFormValue: string;
-} & DispatchProps;
+    initForm: (param: ICountry) => void;
+    onSubmit: (value: ICountry) => void
+}
+
 type PropsWithStyle = Props & WithStyles<"progress" | "textField" | "dialogContentText">;
+
 const styles: any = (theme: Theme) => ({
     progress: {
         margin: theme.spacing.unit * 2,
