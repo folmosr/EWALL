@@ -4,12 +4,14 @@ import { ActionsObservable } from "redux-observable";
 import { Action } from "redux";
 
 import { fullfilledCountries } from "../actions/Countries.actions";
-import { LoadCountryAction, AddCountryAction, DeleteCountryAction } from "../types/Countries.actions.types";
+import { LoadCountryAction, AddCountryAction, DeleteCountryAction, LoadCountriesCompletedAction } from "../types/Countries.actions.types";
 import ActionsTypesEnum from "../enums/Countries.actions.types.enum";
+import { map } from "rxjs/operators";
+import { loadClasificationsCompleted } from "../actions/Clasifications.actions";
 
 
 const url: string = `http://localhost:3000/api/countries/`;
-const setUrlRemoveById:(param:string)=> string = (_id:string)=> `http://localhost:3000/api/countries/${_id}`;
+const setUrlRemoveById: (param: string) => string = (_id: string) => `http://localhost:3000/api/countries/${_id}`;
 
 const requestSettings: any = {
     url,
@@ -23,6 +25,12 @@ function loadCountriesEpic(actions$: ActionsObservable<Action>): Observable<Acti
                 .map(q => fullfilledCountries(q.response));
         });
 }
+
+function loadCountriesCompletedEpic(actions$: ActionsObservable<Action>): Observable<Action> {
+    return actions$.ofType<LoadCountriesCompletedAction>(ActionsTypesEnum.LOAD_COUNTRIES_COMPLETED)
+        .pipe(map(action => fullfilledCountries(action.countries)));
+}
+
 function addCountryEpic(actions$: ActionsObservable<Action>): Observable<Action> {
     return actions$.ofType<AddCountryAction>(ActionsTypesEnum.ADD_COUNTRY)
         .switchMap((action: AddCountryAction) => {
@@ -47,7 +55,7 @@ function addCountryEpic(actions$: ActionsObservable<Action>): Observable<Action>
         })
         .switchMap(() => {
             return Observable.ajax(requestSettings)
-                .map(q => fullfilledCountries(q.response));
+                .map(q => loadClasificationsCompleted(q.response));
         });
 }
 
@@ -63,4 +71,9 @@ function deleteCountryEpic(actions$: ActionsObservable<Action>): Observable<Acti
                 .map(q => fullfilledCountries(q.response));
         });
 }
-export { loadCountriesEpic, addCountryEpic, deleteCountryEpic };
+export {
+    loadCountriesEpic,
+    loadCountriesCompletedEpic,
+    addCountryEpic,
+    deleteCountryEpic
+};

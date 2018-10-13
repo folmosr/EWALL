@@ -3,7 +3,8 @@ import {
     FullfilledSponsorAction,
     InitFormAction,
     AddSponsorAction,
-    DeleteSponsorAction
+    DeleteSponsorAction,
+    LoadSponsorsCompletedAction
 } from "../types/Sponsors.actions.types";
 import ActionsTypesEnum from "../enums/Sponsors.actions.types.enum";
 import ISponsor, { ISponsorForm } from "../interfaces/Sponsor.interfaces";
@@ -12,6 +13,14 @@ function loadSponsors(): LoadSponsorAction {
     return {
         type: ActionsTypesEnum.LOAD_SPONSORS,
         loading: true
+    };
+}
+
+function loadSponsorsCompleted(sponsors:Array<ISponsor>): LoadSponsorsCompletedAction {
+    return {
+        type: ActionsTypesEnum.LOAD_SPONSORS_COMPLETED,
+        loading: true,
+        sponsors
     };
 }
 
@@ -49,6 +58,7 @@ function deleteSponsor(documents: Array<string>): DeleteSponsorAction {
 
 export {
     loadSponsors,
+    loadSponsorsCompleted,
     fullfilledSponsors,
     initSponsorForm,
     addSponsor,

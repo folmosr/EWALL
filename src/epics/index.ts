@@ -1,29 +1,37 @@
-import { combineEpics, Epic } from "redux-observable";
+import { combineEpics } from "redux-observable";
 
 import {
     loadCountriesEpic,
+    loadCountriesCompletedEpic,
     addCountryEpic,
     deleteCountryEpic
 } from "./Countries.epic";
 
 import {
     loadSponsorsEpic,
+    loadSponsorsCompletedEpic,
     addSponsorsEpic,
     deleteSponsorsEpic
 } from "./Sponsors.epic";
 
 import { 
     loadClasificationsEpic,
-    addClasificationEpic
+    loadClasificationsCompletedEpic,
+    addClasificationEpic,
+    deleteClasificationEpic
 } from "./Clasifications.epic"
 
 export default combineEpics(
     loadCountriesEpic,
+    loadCountriesCompletedEpic,
     addCountryEpic,
     deleteCountryEpic,
     loadSponsorsEpic,
+    loadSponsorsCompletedEpic,
     addSponsorsEpic,
     deleteSponsorsEpic,
     loadClasificationsEpic,
-    addClasificationEpic
+    loadClasificationsCompletedEpic,
+    addClasificationEpic,
+    deleteClasificationEpic
 );

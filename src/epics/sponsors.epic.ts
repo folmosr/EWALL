@@ -4,12 +4,14 @@ import { ActionsObservable } from "redux-observable";
 import { Action } from "redux";
 import ActionsTypesEnum from "../enums/Sponsors.actions.types.enum";
 
-import { fullfilledSponsors } from "../actions/Sponsors.actions";
+import { fullfilledSponsors, loadSponsorsCompleted } from "../actions/Sponsors.actions";
 import {
     LoadSponsorAction,
     AddSponsorAction,
-    DeleteSponsorAction
+    DeleteSponsorAction,
+    LoadSponsorsCompletedAction
 } from "../types/Sponsors.actions.types";
+import { map } from "rxjs/operators";
 
 const url: string = `http://localhost:3000/api/organizations/`;
 const headers: object = { 'Content-Type': 'application/json; charset=utf-8' };
@@ -24,6 +26,11 @@ function loadSponsorsEpic(actions$: ActionsObservable<Action>): Observable<Actio
             return Observable.ajax(requestSettings)
                 .map(q => fullfilledSponsors(q.response));
         });
+}
+
+function loadSponsorsCompletedEpic(actions$: ActionsObservable<Action>): Observable<Action> {
+    return actions$.ofType<LoadSponsorsCompletedAction>(ActionsTypesEnum.LOAD_SPONSORS_COMPLETED)
+        .pipe(map(action => fullfilledSponsors(action.sponsors)));
 }
 
 function addSponsorsEpic(actions$: ActionsObservable<Action>): Observable<Action> {
@@ -47,7 +54,7 @@ function addSponsorsEpic(actions$: ActionsObservable<Action>): Observable<Action
         })
         .switchMap(() => {
             return Observable.ajax(requestSettings)
-                .map(q => fullfilledSponsors(q.response));
+                .map(q => loadSponsorsCompleted(q.response));
         });
 }
 
@@ -61,4 +68,8 @@ function deleteSponsorsEpic(actions$: ActionsObservable<Action>): Observable<Act
                 .map(q => fullfilledSponsors(q.response));
         });
 }
-export { loadSponsorsEpic, addSponsorsEpic, deleteSponsorsEpic };
+export {
+    loadSponsorsEpic,
+    loadSponsorsCompletedEpic,
+    addSponsorsEpic, deleteSponsorsEpic
+};

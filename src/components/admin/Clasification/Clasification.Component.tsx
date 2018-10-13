@@ -13,16 +13,20 @@ import Store from "../../../store/Store.namespace";
 import {
     loadClasifications,
     initClasificationForm,
-    addClasification
+    addClasification,
+    deleteClasification
 } from "../../../actions/Clasifications.actions";
 import IClasification, { IClasificationForm } from "../../../interfaces/Clasification.interface";
 import ClasificationList from "./ClasificationList.Component"
 import DialogClasification from "./DialogClasification.Component"
+import { bufferToBase64 } from "../../../helpers/Util";
+import ConfirmDialog from "../../generics/confirmationDialog.Component";
 
 type DispatchProps = {
     loadClasifications: typeof loadClasifications;
     initClasificationForm: typeof initClasificationForm;
-    addClasification: typeof addClasification
+    addClasification: typeof addClasification;
+    deleteClasification: typeof deleteClasification;
 };
 
 type ClasificationProps = Store.Types.ClasificationComponentType & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab">;
@@ -30,8 +34,21 @@ type ClasificationProps = Store.Types.ClasificationComponentType & DispatchProps
 const actions: DispatchProps = {
     loadClasifications,
     initClasificationForm,
-    addClasification
+    addClasification,
+    deleteClasification
 };
+
+const initialState = {
+    selected: {
+        _id: "",
+        name: "",
+        logo: {},
+        create_at: new Date()
+    },
+    openConfirm: false
+};
+
+type State = Readonly<typeof initialState>;
 
 const styles: any = (theme: Theme) => ({
     root: theme.mixins.gutters({
@@ -56,7 +73,9 @@ const styles: any = (theme: Theme) => ({
     },
 });
 
-class Clasification extends React.Component<ClasificationProps, {}> {
+class Clasification extends React.Component<ClasificationProps, State> {
+
+    readonly state: State = initialState;
 
     constructor(props: ClasificationProps) {
         super(props);
@@ -78,24 +97,70 @@ class Clasification extends React.Component<ClasificationProps, {}> {
     }
 
     submit = (value: IClasificationForm) => {
+        console.log(value);
         value.imageBase64Encode = value.imageBase64Encode.split(",").pop();
         value.open = false;
         this.props.addClasification(value);
     }
 
-    onSelect = (clasification: IClasification): void => {
-        console.log(clasification);
+    onSelect = (selected: IClasification): any => {
+        let itemForm: IClasificationForm = {
+            name: selected.name,
+            imageBase64Encode: `data:image/jpeg;base64,${bufferToBase64(selected.logo.data.data)}`,
+            _id: selected._id,
+            create_at: selected.create_at,
+            open: true
+        }
+        this.props.initClasificationForm(itemForm);
     }
 
-    onDelete = (clasification: IClasification): any => {
-        console.log(clasification);
+    onDelete = (clasification: IClasification): void => {
+
+        this.setState({
+            selected: {
+                _id: clasification._id,
+                name: clasification.name,
+                logo: clasification.logo,
+                create_at: clasification.create_at
+            },
+            openConfirm: true
+        });
+    }
+
+    onClickDeleteOk = (): void => {
+        this.props.deleteClasification(this.state.selected._id);
+        this.setState({
+            selected: {
+                _id: "",
+                name: "",
+                logo: {},
+                create_at: new Date()
+            },
+            openConfirm: false
+        });
+    }
+
+    onClickCancelDelete = (): void => {
+        this.setState({
+            selected: {
+                _id: "",
+                name: "",
+                logo: {},
+                create_at: new Date()
+            },
+            openConfirm: false
+        });
     }
 
     render(): JSX.Element {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
-            (this.props.clasifications.length > 0) &&
+            ((this.props.clasifications.length > 0) && (!this.props.loading)) &&
             <ClasificationList onSelect={this.onSelect} onDelete={this.onDelete} clasifications={this.props.clasifications} />;
+        innerComponent = ((this.props.clasifications.length == 0) && (!this.props.loading)) ?
+            < Typography component="p" >
+                Aún no ha sido creada la primera
+                </Typography > : innerComponent
         return (
             <React.Fragment>
                 <Typography variant="headline" component="h3">
@@ -121,6 +186,13 @@ class Clasification extends React.Component<ClasificationProps, {}> {
                     document.getElementById("portal-container")
                 )
                 }
+                {ReactDOM.createPortal(
+                    <ConfirmDialog
+                        openDialog={this.state.openConfirm}
+                        handlerOk={this.onClickDeleteOk}
+                        handlerCancel={this.onClickCancelDelete} />,
+                    document.getElementById("portal-container")
+                )}
             </React.Fragment>
         );
     }

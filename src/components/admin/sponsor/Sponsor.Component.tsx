@@ -18,7 +18,6 @@ import {
     CircularProgress
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import SyncIcon from "@material-ui/icons/Sync";
 import blue from "@material-ui/core/colors/blue";
 import SponsorList from "./SponsorTable.Component";
 

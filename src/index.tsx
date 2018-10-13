@@ -11,7 +11,8 @@ const initialState: Store.Types.All = {
     SponsorComponent: Store.SponsorComponent,
     ClasificationData:Store.ClasificationComponent,
     CountryData: { country: Store.country },
-    SponsorData: { sponsor: Store.sponsorForm }
+    SponsorData: { sponsor: Store.sponsorForm },
+    ClasificationFormData : { clasification: Store.clasificationForm}
 };
 
 const store: ReduxStore<Store.Types.All> = configureStore(initialState);

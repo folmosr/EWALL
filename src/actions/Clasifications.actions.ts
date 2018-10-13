@@ -1,8 +1,10 @@
 import  {
     LoadCalsificationsAction,
+    LoadCalsificationsCompletedAction,
     FulfilledCalsificationsAction,
     InitFormAction,
-    AddClasificationAction
+    AddClasificationAction,
+    DeleteClasificationAction
 } 
 from "../types/Clasifications.actions.type";
 import ActionsTypesEnum  from "../enums/Clasifications.actions.types.enum";
@@ -12,6 +14,14 @@ export function loadClasifications(): LoadCalsificationsAction {
     return {
         type: ActionsTypesEnum.LOAD_CLASIFICATIONS,
         loading: true
+    };
+}
+
+export function loadClasificationsCompleted(clasifications:Array<IClasification>): LoadCalsificationsCompletedAction {
+    return {
+        type: ActionsTypesEnum.LOAD_CLASIFICATIONS_COMPLETED,
+        loading: true,
+        clasifications
     };
 }
 
@@ -34,6 +44,14 @@ export function addClasification(clasification: IClasificationForm): AddClasific
     return {
         type: ActionsTypesEnum.ADD_CLASIFICATION,
         clasification,
+        loading: true
+    };
+}
+
+export function deleteClasification(clasificationId: string): DeleteClasificationAction {
+    return {
+        type: ActionsTypesEnum.DELETE_CLASIFICATION,
+        clasificationId,
         loading: true
     };
 }

@@ -106,7 +106,7 @@ class Countries extends React.Component<CountryProps, State> {
         this.props.initCountryForm(selected);
     }
 
-    onDelete = (country: ICountry): any => {
+    onDelete = (country: ICountry): void => {
 
         this.setState({
             selected: {
@@ -120,6 +120,15 @@ class Countries extends React.Component<CountryProps, State> {
 
     onClickDeleteOk = (): void => {
         this.props.deleteCountry(this.state.selected);
+        this.setState({
+            selected: {
+                _id: null,
+                name: null,
+                code: null,
+                currency: null
+            },
+            openConfirm: false
+        });
     }
 
     onClickCancelDelete = (): void => {
@@ -137,8 +146,12 @@ class Countries extends React.Component<CountryProps, State> {
     render(): JSX.Element {
         let innerComponent: JSX.Element = (this.props.loading) ?
             <CircularProgress className={this.props.classes.progress} thickness={7} /> :
-            (this.props.countries.length > 0) &&
+            ((this.props.countries.length > 0) && (!this.props.loading)) &&
             <CountryList countries={this.props.countries} onSelect={this.onSelect} onDelete={this.onDelete} />;
+        innerComponent = ((this.props.countries.length == 0) && (!this.props.loading)) ?
+            <Typography component="p">
+                Aún no ha creado el primero
+                </Typography> : innerComponent
         return (
             <React.Fragment>
                 <Typography variant="headline" component="h3">

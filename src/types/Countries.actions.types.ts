@@ -7,6 +7,13 @@ export type LoadCountryAction = {
     loading: boolean
 };
 
+export type LoadCountriesCompletedAction = {
+    type: ActionsTypesEnum.LOAD_COUNTRIES_COMPLETED,
+    error?: any,
+    countries: Array<ICountry>,
+    loading: boolean
+};
+
 export type FulfilledCountryAction = {
     type: ActionsTypesEnum.FULFILLED_COUNTRIES,
     countries: Array<ICountry>,

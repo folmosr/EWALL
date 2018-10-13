@@ -7,6 +7,13 @@ export type LoadSponsorAction = {
     loading: boolean
 };
 
+export type LoadSponsorsCompletedAction = {
+    type: SponsorActionTypeEnum.LOAD_SPONSORS_COMPLETED,
+    sponsors: Array<ISponsor>,
+    error?: any,
+    loading: boolean
+};
+
 export type FullfilledSponsorAction = {
     type: SponsorActionTypeEnum.FULFILLED_SPONSORS,
     sponsors: Array<ISponsor>,

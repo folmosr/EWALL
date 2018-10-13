@@ -4,13 +4,17 @@ import {
     LoadCalsificationsAction,
     FulfilledCalsificationsAction,
     InitFormAction,
-    AddClasificationAction
+    AddClasificationAction,
+    LoadCalsificationsCompletedAction,
+    DeleteClasificationAction
 } from "../types/Clasifications.actions.type";
 
 type actions = (
     LoadCalsificationsAction
+    | LoadCalsificationsCompletedAction
     | FulfilledCalsificationsAction
     | AddClasificationAction
+    | DeleteClasificationAction
     | InitFormAction
 );
 const initialState: Store.Types.ClasificationComponentType = {
@@ -23,6 +27,9 @@ function clasificationReducer(state: Store.Types.ClasificationComponentType = in
     switch (action.type) {
         case ActionsTypesEnum.FULFILLED_CLASIFICATIONS:
             return { loading: action.loading, clasifications: action.clasifications };
+        case ActionsTypesEnum.LOAD_CLASIFICATIONS_COMPLETED:
+            return { loading: action.loading, clasifications: action.clasifications };
+        case ActionsTypesEnum.DELETE_CLASIFICATION:
         case ActionsTypesEnum.LOAD_CLASIFICATIONS:
         default:
             return state;

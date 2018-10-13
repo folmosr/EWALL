@@ -5,13 +5,15 @@ import {
     FullfilledSponsorAction,
     AddSponsorAction,
     InitFormAction,
-    DeleteSponsorAction
+    DeleteSponsorAction,
+    LoadSponsorsCompletedAction
 }
     from "../types/Sponsors.actions.types";
 
 type actions = (
     InitFormAction
     | LoadSponsorAction
+    | LoadSponsorsCompletedAction
     | FullfilledSponsorAction
     | AddSponsorAction
     | DeleteSponsorAction
@@ -25,6 +27,8 @@ function sponsorReducer(state: Store.Types.SponsorComponentType = initialState, 
         case ActionsTypesEnum.LOAD_SPONSORS:
             return state;
         case ActionsTypesEnum.FULFILLED_SPONSORS:
+            return { loading: action.loading, sponsors: action.sponsors };
+        case ActionsTypesEnum.LOAD_SPONSORS_COMPLETED:
             return { loading: action.loading, sponsors: action.sponsors };
         case ActionsTypesEnum.DELETE_SPONSOR:
         default:

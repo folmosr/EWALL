@@ -3,7 +3,8 @@ import {
     FulfilledCountryAction,
     AddCountryAction,
     InitFormAction,
-    DeleteCountryAction
+    DeleteCountryAction,
+    LoadCountriesCompletedAction
 } from "../types/Countries.actions.types";
 import ICountry from "../interfaces/Country.interfaces";
 import ActionsTypesEnum from "../enums/Countries.actions.types.enum";
@@ -12,6 +13,14 @@ function loadCountries(): LoadCountryAction {
     return {
         type: ActionsTypesEnum.LOAD_COUNTRIES,
         loading: true
+    };
+}
+
+export function loadCountriesCompleted(countries:Array<ICountry>): LoadCountriesCompletedAction {
+    return {
+        type: ActionsTypesEnum.LOAD_COUNTRIES_COMPLETED,
+        loading: true,
+        countries
     };
 }
 
