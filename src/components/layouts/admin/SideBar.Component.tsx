@@ -9,6 +9,7 @@ const styles: any = (theme: any) => ({
     drawerPaper: {
         position: "relative",
         width: drawerWidth,
+        minHeight:600
     },
     toolbar: theme.mixins.toolbar
 });

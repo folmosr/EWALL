@@ -21,7 +21,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import renderTextField from "../../generics/RenderTextField.Component";
+import { renderTextField } from "../../generics/RenderFormField.Component";
 import { Avatar } from "../../../../node_modules/@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
@@ -171,7 +171,7 @@ class DialogClasification extends React.Component<globalProps, {}> {
     }
 }
 
-let DialogClasificationForm: DecoratedComponentClass<{}, PropsWithStyle> =
+let DialogClasificationForm: DecoratedComponentClass<{}, PropsWithStyle, {}> =
     reduxForm<{}, PropsWithStyle>({
         form: "clasificationForm",
         enableReinitialize: true

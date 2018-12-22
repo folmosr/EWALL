@@ -21,7 +21,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import renderTextField from "../../generics/RenderTextField.Component";
+import { renderTextField } from "../../generics/RenderFormField.Component";
 import { Avatar } from "../../../../node_modules/@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Button from "@material-ui/core/Button";
@@ -122,13 +122,13 @@ class DialogSponsor extends React.Component<globalProps, {}> {
                 <Field
                     className={this.props.classes.textField}
                     name="name"
-                    label="Nombre"
+                    placeholder="Nombre"
                     component={renderTextField}
                     validate={[required, justLetter]} />
                 <Field
                     className={this.props.classes.textField}
                     name="url"
-                    label="Url"
+                    placeholder="Url"
                     component={renderTextField}
                     validate={[required, isValidURL]} />
                 <label htmlFor="flat-button-file">
@@ -179,7 +179,7 @@ class DialogSponsor extends React.Component<globalProps, {}> {
     }
 }
 
-let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle> =
+let DialogSponsorForm: DecoratedComponentClass<{}, PropsWithStyle, {}> =
     reduxForm<{}, PropsWithStyle>({
         form: "sponsorForm",
         enableReinitialize: true

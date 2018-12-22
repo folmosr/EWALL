@@ -20,7 +20,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import ICountry from "../../../interfaces/Country.interfaces";
-import renderTextField from "../../generics/RenderTextField.Component";
+import { renderTextField } from "../../generics/RenderFormField.Component";
 import { required, justLetter, minLengthOfISO, asyncValidateCountry } from "../../../helpers/Validations";
 
 type Props = {
@@ -100,7 +100,7 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
                             {components}
                         </DialogContent>
                         <DialogActions>
-                            <Button type="button" onClick={() => { this.props.initForm({ name:undefined, currency:undefined, code:undefined, open:false}); }}
+                            <Button type="button" onClick={() => { this.props.initForm({ name: undefined, currency: undefined, code: undefined, open: false }); }}
                                 color="secondary">Cancelar</Button>
                             <Button type="submit" disabled={this.props.pristine || this.props.submitting} color="primary">Guardar</Button>
                         </DialogActions>
@@ -112,13 +112,13 @@ class DialogCountries extends React.Component<PropsWithStyle & WrappedFieldProps
 }
 
 const selector = formValueSelector("countryForm")
-let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle> =
+let DialogCountriesForm: DecoratedComponentClass<{}, PropsWithStyle, {}> =
     reduxForm<{}, PropsWithStyle>({
         form: "countryForm",
         asyncValidate: asyncValidateCountry,
         asyncBlurFields: ["code"],
         enableReinitialize: true,
-        shouldAsyncValidate: (param: AsyncValidateCallback<FormData> = {
+        shouldAsyncValidate: (param: AsyncValidateCallback<FormData, {}> = {
             trigger: "blur",
             initialized: false,
             pristine: false,
