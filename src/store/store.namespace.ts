@@ -1,6 +1,7 @@
 import ICountry from "../interfaces/Country.interfaces";
 import IClasification, { IClasificationForm } from "../interfaces/Clasification.interface";
 import ISponsor, { ISponsorForm } from "../interfaces/Sponsor.interfaces";
+import { IEventForm } from "../interfaces/Event.interface";
 
 namespace Store {
 
@@ -56,13 +57,26 @@ namespace Store {
             loading?: boolean
         };
 
+        export type EventForm = {
+            event?:{
+                _id:string,
+                country:string,
+                classification:string,
+                open?: boolean                
+            }
+            countries: Array<ICountry>,
+            classifications: Array<IClasification>,
+            open: boolean
+        };
+
         export type All = {
             CountryComponent: CountryComponentType,
             ClasificationData: ClasificationComponentType,
             SponsorComponent: SponsorComponentType,
             CountryData: { country: ICountry },
             ClasificationFormData: { clasification: IClasificationForm },
-            SponsorData: { sponsor: ISponsorForm }
+            SponsorData: { sponsor: ISponsorForm },
+            EventData: IEventForm
         };
 
     }
@@ -87,6 +101,17 @@ namespace Store {
         name: null,
         imageBase64Encode: null,
         _id: null,
+        open: false
+    };
+
+    export const eventForm: IEventForm = {
+       event:{
+           _id:null,
+           country:null,
+           classification:null
+       },
+        countries:[],
+        classifications: [],
         open: false
     };
 

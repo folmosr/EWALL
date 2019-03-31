@@ -15,6 +15,7 @@ const initialState: Store.Types.All = {
     ClasificationData: Store.ClasificationComponent,
     CountryData: { country: Store.country },
     SponsorData: { sponsor: Store.sponsorForm },
+    EventData: Store.eventForm,
     ClasificationFormData: { clasification: Store.clasificationForm }
 };
 

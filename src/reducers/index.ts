@@ -4,6 +4,7 @@ import Store from "../store/Store.namespace";
 import { countriesReducer, countryFormReducer } from "./Countries.reducer";
 import { sponsorReducer, sponsorFormReducer } from "./Sponsors.reducer";
 import { clasificationReducer, clasificationFormReducer } from "./Clasifications.reducer";
+import { eventFormReducer } from "./Events.reducer";
 
 const rootReducer: Reducer<Store.Types.All> = combineReducers({
     CountryComponent: countriesReducer,
@@ -12,6 +13,7 @@ const rootReducer: Reducer<Store.Types.All> = combineReducers({
     SponsorData: sponsorFormReducer,
     ClasificationData: clasificationReducer,
     ClasificationFormData: clasificationFormReducer,
+    EventData: eventFormReducer, 
     form: formReducer
 });
 

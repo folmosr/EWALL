@@ -1,42 +1,37 @@
 import * as React from "React";
 import * as ReactDOM from "react-dom";
-
-import { connect } from "react-redux";
+import { connect, Dispatch } from "react-redux";
 import Store from "../../../store/Store.namespace";
+import AddIcon from "@material-ui/icons/Add";
 import { bindActionCreators } from "redux";
-import actions from "redux-form/lib/actions";
 import {
     withStyles,
     Typography,
     Paper,
     Button,
     Theme,
-    WithStyles,
-    DialogContentText,
-    MenuItem,
-    ListItemText
+    WithStyles
 } from "@material-ui/core";
 import { blue } from "@material-ui/core/colors";
-import {
-    Field,
-    reduxForm,
-    InjectedFormProps,
-    DecoratedComponentClass,
-    WrappedFieldProps
-} from "redux-form";
-import { required } from "../../../helpers/Validations";
-import { renderSelectField } from "../../generics/RenderFormField.Component";
 import ICountry from "../../../interfaces/Country.interfaces";
 import IClasification from "../../../interfaces/Clasification.interface";
+import { initEventForm } from "../../../actions/Events.actions";
+import EventDialog from "./DialogEvent.Component";
 
 type Props = {
     countries: Array<ICountry>,
-    clasifications: Array<IClasification>,
-    initForm: () => void,
-    onSubmit: () => void
+    clasifications: Array<IClasification>
 }
 
-type PropsWithStyle = Props & WithStyles<"root" | "progress" | "button" | "fab" | "dialogContentText" | "field" | "menuItem" | "primary">;
+type DispatchProps = {
+    initEventForm: typeof initEventForm;
+};
+
+type PropsWithStyle = Props & DispatchProps & WithStyles<"root" | "progress" | "button" | "fab" | "dialogContentText" | "field" | "menuItem" | "primary">;
+
+const actions: DispatchProps = {
+    initEventForm
+};
 
 const styles: any = (theme: Theme) => ({
     root: theme.mixins.gutters({
@@ -81,9 +76,9 @@ const styles: any = (theme: Theme) => ({
     primary: {},
 });
 
-class EventComponent extends React.Component<PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>, {}>
+class EventComponent extends React.Component<PropsWithStyle>
 {
-    constructor(props: PropsWithStyle & WrappedFieldProps & InjectedFormProps<{}, PropsWithStyle>) {
+    constructor(props: PropsWithStyle) {
         super(props);
         console.log('paises', this.props.countries);
         console.log('clasifications', this.props.clasifications);
@@ -96,41 +91,33 @@ class EventComponent extends React.Component<PropsWithStyle & WrappedFieldProps 
                     Eventos
             </Typography>
                 <Typography component="p">
-                    Lista de países ya configurados
+                    Lista de eventos ya configurados
                 </Typography>
                 <Paper className={this.props.classes.root} elevation={4}>
-                    <form>
-                        <Field
-                            className={this.props.classes.field}
-                            name="color"
-                            label="Color Favorito"
-                            component={renderSelectField}
-                            validate={[required]}>
-                            <MenuItem value="" disabled>
-                                País
-                            </MenuItem>
-                            {this.props.countries.map(country =>
-                                <MenuItem key={country._id} value={country._id}>
-                                    {country.name}
-                                </MenuItem>
-                            )}
-                        </Field>
-                    </form>
+                    <Button variant="fab" mini color="secondary" aria-label="add"
+                        className={this.props.classes.fab}
+                        onClick={() => this.props.initEventForm(this.props.countries, this.props.clasifications)}
+                    >
+                        <AddIcon />
+                    </Button>
                 </Paper>
+                {ReactDOM.createPortal(
+                    <EventDialog />,
+                    document.getElementById("portal-container")
+                )}
             </React.Fragment>
         )
     }
 }
-let EventForm: DecoratedComponentClass<{}, PropsWithStyle, {}> =
-    reduxForm<{}, PropsWithStyle>({
-        form: "EventForm",
-        enableReinitialize: true
-    })(EventComponent);
+
 export default connect(
     (state: Store.Types.All) => {
         return {
             countries: state.CountryComponent.countries,
             clasifications: state.ClasificationData.clasifications
         }
+    },
+    (dispatch: Dispatch<DispatchProps>) => {
+        return bindActionCreators(actions, dispatch);
     }
-)(withStyles(styles)<Props>(EventForm));
+)(withStyles(styles)(EventComponent));
